@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="KalkulaatorWindow" parent="GtkApplicationWindow">
+    <property name="default-width">600</property>
+    <property name="default-height">300</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header_bar">
+        <child type="start">
+          <object class="GtkMenuButton">
+            <property name="icon-name">open-menu-symbolic</property>
+            <property name="menu-model">window_menu</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton">
+            <property name="icon-name">open-menu-symbolic</property>
+            <property name="menu-model">primary_menu</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="main_box">
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+        <child>
+          <object class="GtkButton" id="Hello">
+            <property name="label">Hello</property>
+            <signal name="clicked" handler="on_hello_clicked"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+
+
+  <menu id="window_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Basic</attribute>
+        <attribute name="action">app.options</attribute>
+        <attribute name="target">Basic</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Advanced</attribute>
+        <attribute name="action">app.options</attribute>
+        <attribute name="target">advanced</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Programming</attribute>
+        <attribute name="action">app.options</attribute>
+        <attribute name="target">programming</attribute>
+      </item>
+       <item>
+        <attribute name="label" translatable="yes">Converter</attribute>
+        <attribute name="action">app.options</attribute>
+        <attribute name="target">converter</attribute>
+      </item>
+    </section>
+  </menu>
+
+
+<menu id="primary_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About kalkulaator</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
