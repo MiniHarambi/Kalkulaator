@@ -8,7 +8,7 @@
       <object class="GtkHeaderBar" id="header_bar">
         <child type="start">
           <object class="GtkMenuButton">
-            <property name="icon-name">open-menu-symbolic</property>
+            <property name="label">options</property>
             <property name="menu-model">window_menu</property>
           </object>
         </child>
