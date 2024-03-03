@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="KalkulaatorWindow" parent="GtkApplicationWindow">
+    <property name="default-width">600</property>
+    <property name="default-height">450</property>
+    <property name="resizable">True</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header_bar">
+        <child type="start">
+          <object class="GtkMenuButton">
+            <property name="label">options</property>
+            <property name="menu-model">window_menu</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton">
+            <property name="icon-name">open-menu-symbolic</property>
+            <property name="menu-model">primary_menu</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkBox" id="main_box">
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+        <child>
+         <object class="GtkBox" id="row1">
+          <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+           <child>
+            <object class="GtkEntry" id="input_entry">
+              <property name="editable">True</property>
+              <property name="valign">center</property>
+              <property name="width-request">600</property>
+              <property name="height-request">75</property>
+            </object>
+          </child>
+         </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="row2">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <child>
+              <object class="GtkButton" id="button1">
+                <property name="label">button 1</property>
+                <property name="width-request">120</property>
+                <property name="height-request">50</property>
+                  <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button2">
+                    <property name="label">Button 2</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button3">
+                    <property name="label">Button 3</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button4">
+                    <property name="label">Button 4</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button21">
+                    <property name="icon-name">view-refresh-symbolic</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+        <child>
+          <object class="GtkBox" id="row3">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <child>
+              <object class="GtkButton" id="button5">
+                <property name="label">9</property>
+                <property name="width-request">120</property>
+                <property name="height-request">50</property>
+                  <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button6">
+                    <property name="label">8</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button7">
+                    <property name="label">7</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button8">
+                    <property name="icon-name">edit-delete</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkButton" id="button22">
+                      <property name="icon-name">edit-clear</property>
+                       <property name="width-request">120</property>
+                      <property name="height-request">50</property>
+                        <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    </object>
+                  </child>
+                </object>
+              </child>
+
+        <child>
+          <object class="GtkBox" id="row4">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <child>
+              <object class="GtkButton" id="button9">
+                <property name="label">4</property>
+                 <property name="width-request">120</property>
+                <property name="height-request">50</property>
+                  <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button10">
+                    <property name="label">5</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button11">
+                    <property name="label">6</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button12">
+                    <property name="label">x</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkButton" id="button23">
+                      <property name="label">/</property>
+                       <property name="width-request">120</property>
+                      <property name="height-request">50</property>
+                        <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    </object>
+                  </child>
+                </object>
+              </child>
+
+        <child>
+          <object class="GtkBox" id="row5">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <child>
+              <object class="GtkButton" id="button13">
+                <property name="label">1</property>
+                 <property name="width-request">120</property>
+                <property name="height-request">50</property>
+                  <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button14">
+                    <property name="label">2</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button15">
+                    <property name="label">3</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button16">
+                    <property name="label">+</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkButton" id="button24">
+                      <property name="label">-</property>
+                       <property name="width-request">120</property>
+                      <property name="height-request">50</property>
+                        <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    </object>
+                  </child>
+                </object>
+              </child>
+
+        <child>
+          <object class="GtkBox" id="row6">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <child>
+              <object class="GtkButton" id="button17">
+                <property name="label">0</property>
+                 <property name="width-request">240</property>
+                <property name="height-request">50</property>
+                  <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button19">
+                    <property name="label">=</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button20">
+                    <property name="label">.</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkButton" id="button25">
+                      <property name="label">ANS</property>
+                       <property name="width-request">120</property>
+                      <property name="height-request">50</property>
+                        <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    </object>
+                  </child>
+                </object>
+              </child>
+
+          </object>
+        </child>
+  </template>
+
+  <menu id="window_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Basic</attribute>
+        <attribute name="action">app.options</attribute>
+        <attribute name="target">Basic</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Advanced</attribute>
+        <attribute name="action">app.options</attribute>
+        <attribute name="target">advanced</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Programming</attribute>
+        <attribute name="action">app.options</attribute>
+        <attribute name="target">programming</attribute>
+      </item>
+       <item>
+        <attribute name="label" translatable="yes">Converter</attribute>
+        <attribute name="action">app.options</attribute>
+        <attribute name="target">converter</attribute>
+      </item>
+    </section>
+  </menu>
+
+
+<menu id="primary_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About kalkulaator</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
