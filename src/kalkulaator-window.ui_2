@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0"/>
-  <template class="KalkulaatorWindow" parent="GtkApplicationWindow">
-    <property name="default-width">600</property>
-    <property name="default-height">450</property>
+  <requires lib="gtk+" version="3.0"/>
+  <template class="TestingWindow" parent="GtkApplicationWindow">
+    <property name="default-width">610</property>
+    <property name="default-height">410</property>
     <property name="resizable">True</property>
-    <child type="titlebar">
+    <child>
       <object class="GtkHeaderBar" id="header_bar">
-        <child type="start">
+        <child>
           <object class="GtkMenuButton">
             <property name="label">options</property>
             <property name="menu-model">window_menu</property>
           </object>
         </child>
-        <child type="end">
+        <child>
           <object class="GtkMenuButton">
-            <property name="icon-name">open-menu-symbolic</property>
+            <property name="label">open-menu</property>
             <property name="menu-model">primary_menu</property>
           </object>
         </child>
@@ -23,84 +23,89 @@
     </child>
 
     <child>
-      <object class="GtkBox" id="main_box">
-        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+      <object class="GtkGrid" id="main_grid">
+        <property name="row-homogeneous">True</property>
+        <property name="column-homogeneous">True</property>
+        <property name="margin-start">5</property>
+        <property name="margin-end">5</property>
+        <property name="margin-top">5</property>
+        <property name="margin-bottom">5</property>
         <child>
-         <object class="GtkBox" id="row1">
-          <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-           <child>
-            <object class="GtkEntry" id="input_entry">
-              <property name="editable">True</property>
-              <property name="valign">center</property>
-              <property name="width-request">600</property>
-              <property name="height-request">75</property>
-            </object>
-          </child>
-         </object>
+          <object class="GtkBox" id="row1">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <child>
+              <object class="GtkEntry" id="input_entry">
+                <property name="editable">True</property>
+                <property name="valign">center</property>
+                <property name="width-request">600</property>
+                <property name="height-request">75</property>
+              </object>
+            </child>
+          </object>
         </child>
         <child>
           <object class="GtkBox" id="row2">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
-              <object class="GtkButton" id="button1">
-                <property name="label">button 1</property>
+              <object class="GtkButton" id="buttonsquare">
+                <property name="label">x²</property>
                 <property name="width-request">120</property>
                 <property name="height-request">50</property>
-                  <signal name="clicked" handler="on_button_clicked" swapped="no"/>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button2">
-                    <property name="label">Button 2</property>
-                     <property name="width-request">120</property>
-                    <property name="height-request">50</property>
-                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button3">
-                    <property name="label">Button 3</property>
-                     <property name="width-request">120</property>
-                    <property name="height-request">50</property>
-                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button4">
-                    <property name="label">Button 4</property>
-                     <property name="width-request">120</property>
-                    <property name="height-request">50</property>
-                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button21">
-                    <property name="icon-name">view-refresh-symbolic</property>
-                     <property name="width-request">120</property>
-                    <property name="height-request">50</property>
-                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
-                  </object>
-                </child>
+                <signal name="clicked" handler="on_buttonsquare_clicked"/>
               </object>
             </child>
+            <child>
+              <object class="GtkButton" id="buttonsqrt">
+                <property name="label">√</property>
+                <property name="width-request">120</property>
+                <property name="height-request">50</property>
+                <signal name="clicked" handler="on_buttonsqrt_clicked"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="buttonsulg1">
+                <property name="label">(</property>
+                <property name="width-request">120</property>
+                <property name="height-request">50</property>
+                <signal name="clicked" handler="on_buttonsulg1_clicked"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="buttonsulg2">
+                <property name="label">)</property>
+                <property name="width-request">120</property>
+                <property name="height-request">50</property>
+                <signal name="clicked" handler="on_buttonsulg2_clicked"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="buttonhistory">
+                <property name="label">History</property>
+                <property name="width-request">120</property>
+                <property name="height-request">50</property>
+                <signal name="clicked" handler="on_buttonhistory_clicked"/>
+              </object>
+            </child>
+          </object>
+        </child>
 
         <child>
           <object class="GtkBox" id="row3">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
-              <object class="GtkButton" id="button5">
+              <object class="GtkButton" id="button9">
                 <property name="label">9</property>
                 <property name="width-request">120</property>
                 <property name="height-request">50</property>
-                  <signal name="clicked" handler="on_button_clicked" swapped="no"/>
-                  </object>
+                  <signal name="clicked" handler="on_nrbutton_clicked"/>
+                </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button6">
+                  <object class="GtkButton" id="button8">
                     <property name="label">8</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_nrbutton_clicked"/>
                   </object>
                 </child>
                 <child>
@@ -108,23 +113,23 @@
                     <property name="label">7</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_nrbutton_clicked"/>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button8">
-                    <property name="icon-name">edit-delete</property>
+                  <object class="GtkButton" id="buttondelete">
+                    <property name="label">edit-delete</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                      <signal name="clicked" handler="on_buttondelete_clicked"/>
                     </object>
                   </child>
                   <child>
-                    <object class="GtkButton" id="button22">
-                      <property name="icon-name">edit-clear</property>
+                    <object class="GtkButton" id="buttonclear">
+                      <property name="label">edit-clear</property>
                        <property name="width-request">120</property>
                       <property name="height-request">50</property>
-                        <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                        <signal name="clicked" handler="on_buttonclear_clicked"/>
                     </object>
                   </child>
                 </object>
@@ -134,43 +139,43 @@
           <object class="GtkBox" id="row4">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
-              <object class="GtkButton" id="button9">
+              <object class="GtkButton" id="button4">
                 <property name="label">4</property>
                  <property name="width-request">120</property>
                 <property name="height-request">50</property>
-                  <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  <signal name="clicked" handler="on_nrbutton_clicked"/>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button10">
+                  <object class="GtkButton" id="button5">
                     <property name="label">5</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_nrbutton_clicked"/>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button11">
+                  <object class="GtkButton" id="button6">
                     <property name="label">6</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_nrbutton_clicked"/>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button12">
+                  <object class="GtkButton" id="buttonmultiply">
                     <property name="label">x</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                      <signal name="clicked" handler="on_buttonmultiply_clicked"/>
                     </object>
                   </child>
                   <child>
-                    <object class="GtkButton" id="button23">
+                    <object class="GtkButton" id="buttondivide">
                       <property name="label">/</property>
                        <property name="width-request">120</property>
                       <property name="height-request">50</property>
-                        <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                        <signal name="clicked" handler="on_buttondivide_clicked"/>
                     </object>
                   </child>
                 </object>
@@ -180,43 +185,43 @@
           <object class="GtkBox" id="row5">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
-              <object class="GtkButton" id="button13">
+              <object class="GtkButton" id="button1">
                 <property name="label">1</property>
                  <property name="width-request">120</property>
                 <property name="height-request">50</property>
-                  <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  <signal name="clicked" handler="on_nrbutton_clicked"/>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button14">
+                  <object class="GtkButton" id="button2">
                     <property name="label">2</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_nrbutton_clicked"/>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button15">
+                  <object class="GtkButton" id="button3">
                     <property name="label">3</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_nrbutton_clicked"/>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button16">
+                  <object class="GtkButton" id="buttonadd">
                     <property name="label">+</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                      <signal name="clicked" handler="on_buttonadd_clicked"/>
                     </object>
                   </child>
                   <child>
-                    <object class="GtkButton" id="button24">
+                    <object class="GtkButton" id="buttonsubtract">
                       <property name="label">-</property>
                        <property name="width-request">120</property>
                       <property name="height-request">50</property>
-                        <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                        <signal name="clicked" handler="on_buttonsubtract_clicked"/>
                     </object>
                   </child>
                 </object>
@@ -226,42 +231,42 @@
           <object class="GtkBox" id="row6">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
-              <object class="GtkButton" id="button17">
+              <object class="GtkButton" id="button0">
                 <property name="label">0</property>
                  <property name="width-request">240</property>
                 <property name="height-request">50</property>
-                  <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                  <signal name="clicked" handler="on_nrbutton_clicked"/>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button19">
+                  <object class="GtkButton" id="buttonequal">
                     <property name="label">=</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                    <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_buttonequal_clicked"/>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button20">
+                  <object class="GtkButton" id="buttondot">
                     <property name="label">.</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
-                      <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                      <signal name="clicked" handler="on_buttondot_clicked"/>
                     </object>
                   </child>
                   <child>
-                    <object class="GtkButton" id="button25">
+                    <object class="GtkButton" id="buttonans">
                       <property name="label">ANS</property>
                        <property name="width-request">120</property>
                       <property name="height-request">50</property>
-                        <signal name="clicked" handler="on_button_clicked" swapped="no"/>
+                        <signal name="clicked" handler="on_buttonans_clicked"/>
                     </object>
                   </child>
                 </object>
               </child>
 
-          </object>
-        </child>
+      </object>
+    </child>
   </template>
 
   <menu id="window_menu">
@@ -306,4 +311,5 @@
       </item>
     </section>
   </menu>
+
 </interface>
