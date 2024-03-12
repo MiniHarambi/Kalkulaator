@@ -12,6 +12,7 @@ struct _TestingWindow
   GtkEntry            *input_entry;
   GtkLabel            *label;
   GtkWindow           *window;
+  GdkDisplay	      *display;
 
   GtkButton           *button0;
   GtkButton           *button1;
@@ -237,7 +238,8 @@ static void testing_window_class_init(TestingWindowClass *klass)
 {
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
-    gtk_widget_class_set_template_from_resource(widget_class, "/org/gnome/testingcalc/testing-window.ui");
+    gtk_widget_class_set_template_from_resource(widget_class, 
+    		"/org/gnome/testingcalc/testing-window.ui");
     gtk_widget_class_bind_template_child(widget_class, TestingWindow, header_bar);
     gtk_widget_class_bind_template_child(widget_class, TestingWindow, label);
     gtk_widget_class_bind_template_child(widget_class, TestingWindow, window);
@@ -256,9 +258,24 @@ static void testing_window_class_init(TestingWindowClass *klass)
     gtk_widget_class_bind_template_callback(widget_class, on_buttonsqrt_clicked);
     gtk_widget_class_bind_template_callback(widget_class, on_buttonsquare_clicked);
     gtk_widget_class_bind_template_callback(widget_class, on_buttonhistory_clicked);
+    gtk_widget_class_bind_template_callback(widget_class, on_buttonsulg1_clicked);
+    gtk_widget_class_bind_template_callback(widget_class, on_buttonsulg2_clicked);
 }
 
-static void testing_window_init(TestingWindow *self)
-{
+static void testing_window_init(TestingWindow *self) {
+    // Initialize the widget from the template
     gtk_widget_init_template(GTK_WIDGET(self));
+
+    // Get the keymap for the display
+    GdkKeymap *keymap = gdk_keymap_get_for_display(self->display);
+    if (keymap == NULL) 
+    {
+        g_critical("Failed to get the keymap for the display");
+        return;
+    }
+
+    // Initialize the expression string
+    self->expression = g_strdup("");
 }
+
+
