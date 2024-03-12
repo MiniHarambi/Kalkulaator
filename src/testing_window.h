@@ -28,4 +28,5 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (TestingWindow, testing_window, TESTING, WINDOW, GtkApplicationWindow)
 
+
 G_END_DECLS
