@@ -1,37 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.0"/>
-  <template class="TestingWindow" parent="GtkApplicationWindow">
+<template class="TestingWindow" parent="GtkApplicationWindow">
     <property name="default-width">610</property>
     <property name="default-height">410</property>
     <property name="resizable">True</property>
     <child>
-      <object class="GtkHeaderBar" id="header_bar">
+      <object class="GtkBox">
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
         <child>
-          <object class="GtkMenuButton">
-            <property name="label">options</property>
-            <property name="menu-model">window_menu</property>
+          <object class="GtkHeaderBar" id="header_bar">
+            <child>
+              <object class="GtkMenuButton">
+                <property name="label">open-menu</property>
+                <property name="menu-model">primary_menu</property>
+              </object>
+            </child>
           </object>
         </child>
+        
         <child>
-          <object class="GtkMenuButton">
-            <property name="label">open-menu</property>
-            <property name="menu-model">primary_menu</property>
-          </object>
-        </child>
-      </object>
-    </child>
-
-    <child>
-      <object class="GtkGrid" id="main_grid">
-        <property name="row-homogeneous">True</property>
-        <property name="column-homogeneous">True</property>
-        <property name="margin-start">5</property>
-        <property name="margin-end">5</property>
-        <property name="margin-top">5</property>
-        <property name="margin-bottom">5</property>
-        <child>
-          <object class="GtkBox" id="row1">
+          <object class="GtkGrid" id="main_grid">
+            <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
+            <child>
+          <object class="GtkGrid" id="row1">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkEntry" id="input_entry">
@@ -44,7 +39,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox" id="row2">
+          <object class="GtkGrid" id="row2">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkButton" id="buttonsquare">
@@ -90,7 +85,7 @@
         </child>
 
         <child>
-          <object class="GtkBox" id="row3">
+          <object class="GtkGrid" id="row3">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkButton" id="button9">
@@ -136,7 +131,7 @@
               </child>
 
         <child>
-          <object class="GtkBox" id="row4">
+          <object class="GtkGrid" id="row4">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkButton" id="button4">
@@ -182,7 +177,7 @@
               </child>
 
         <child>
-          <object class="GtkBox" id="row5">
+          <object class="GtkGrid" id="row5">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkButton" id="button1">
@@ -228,7 +223,7 @@
               </child>
 
         <child>
-          <object class="GtkBox" id="row6">
+          <object class="GtkGrid" id="row6">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkButton" id="button0">
@@ -265,35 +260,12 @@
                 </object>
               </child>
 
+    	    
+          </object>
+        </child>
       </object>
     </child>
   </template>
-
-  <menu id="window_menu">
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">Basic</attribute>
-        <attribute name="action">app.options</attribute>
-        <attribute name="target">Basic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Advanced</attribute>
-        <attribute name="action">app.options</attribute>
-        <attribute name="target">advanced</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Programming</attribute>
-        <attribute name="action">app.options</attribute>
-        <attribute name="target">programming</attribute>
-      </item>
-       <item>
-        <attribute name="label" translatable="yes">Converter</attribute>
-        <attribute name="action">app.options</attribute>
-        <attribute name="target">converter</attribute>
-      </item>
-    </section>
-  </menu>
-
 
 <menu id="primary_menu">
     <section>
