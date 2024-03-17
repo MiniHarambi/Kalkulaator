@@ -91,7 +91,7 @@ kalkulaator_application_show_about (GSimpleAction *action,
 {
   KalkulaatorApplication *self = KALKULAATOR_APPLICATION (user_data);
   GtkWindow *window = NULL;
-  const gchar *authors[] = {"Markus Parm & Tristan Tsopp", NULL};
+  const gchar *authors[] = {"Markus Parm and Tristan Tsopp", NULL};
 
   g_return_if_fail (KALKULAATOR_IS_APPLICATION (self));
 
