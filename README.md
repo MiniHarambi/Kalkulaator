@@ -11,6 +11,6 @@ ninja
 ninja install
 
 Esimest korda alla laadides tuleb liikuda tagasi põhikausta (käsuga cd ..). 
-Kui aga oled juba põhikaustas, siis sisesta järgnev käk programmi käivitamiseks:
+Kui aga oled juba põhikaustas, siis sisesta järgnev käsk programmi käivitamiseks:
 
 ./install/bin/kalkulaator
