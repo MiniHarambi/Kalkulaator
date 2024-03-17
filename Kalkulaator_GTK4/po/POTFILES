@@ -1,0 +1,7 @@
+data/org.github.kalkulaator.desktop.in
+data/org.github.kalkulaator.appdata.xml.in
+data/org.github.kalkulaator.gschema.xml
+src/kalkulaator-window.ui
+src/main.c
+src/kalkulaator-window.c
+
