@@ -250,6 +250,7 @@
                   <property name="label">log10</property>
                    <property name="width-request">120</property>
                   <property name="height-request">50</property>
+                    <signal name="clicked" handler="kalkulaator_window__log_clicked" />
                     </object>
                   </child>
                 <child>
