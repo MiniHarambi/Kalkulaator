@@ -42,7 +42,7 @@ int precedence(char op) {
         case '^':
             return 3;
         case 'l':
-        case 'r':
+        case 's':
             return 4;
         default:
             return 0;
@@ -67,7 +67,7 @@ double applyOperator(double op1, double op2, char operatorr) {
             return pow(op1, op2);
         case 'l':
             return log10(op1);
-        case 'r':
+        case 's':
             return sqrt(op1);
         default:
             printf("Invalid operator\n");
@@ -80,26 +80,22 @@ double evaluateExpression(char *expr, int start, int end) {
     Stack operand_stack;
     initialize(&operator_stack);
     initialize(&operand_stack);
-
+    for (int i = start; i < end; i++) {
+        if (expr[i] == ',') {
+            expr[i] = '.';
+        }
+    }
     int i = start;
     while (i < end) {
         if (expr[i] == ' ') {
             i++;
             continue;
         }
-        if (isdigit(expr[i]) || (expr[i] == '-' && (i == start || expr[i - 1] == '('))) {
-            double operand = 0;
-            int sign = 1;
-            if (expr[i] == '-') {
-                sign = -1;
-                i++;
-            }
-            while (isdigit(expr[i])) {
-                operand = operand * 10 + (expr[i] - '0');
-                i++;
-            }
-            push(&operand_stack, sign * operand);
-            i--;
+        if (isdigit(expr[i]) || expr[i] == '.') {
+            char* endptr;
+            double operand = strtod(&expr[i], &endptr); // Convert string to double
+            push(&operand_stack, operand);
+            i = endptr - expr - 1; // Move i to the end of the parsed number
         }
         else if (expr[i] == '(') {
             int j = i + 1;
@@ -159,15 +155,7 @@ double evaluateExpression(char *expr, int start, int end) {
 double evaluateInfix(char *expr) {
     return evaluateExpression(expr, 0, strlen(expr));
 }
-/*
-gchar *CalcMain(char *expr) {
-    double result = evaluateInfix(expr);
-   // printf("Result: %.4f\n", result);
-    gchar *answer = g_malloc(sizeof(result) * sizeof(char));
-    memcpy(answer, &result,sizeof(result));
-    return answer;
-}
-*/
+
 gchar *CalcMain(char *expr) {
     double result = evaluateInfix(expr);
     return g_strdup_printf("%.2f", result);
