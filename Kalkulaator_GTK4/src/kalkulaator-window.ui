@@ -238,14 +238,6 @@
                   </object>
                 </child>
                 <child>
-                 <object class="GtkButton" id="buttonlog">
-                  <property name="label">log10</property>
-                   <property name="width-request">120</property>
-                  <property name="height-request">50</property>
-                    <signal name="clicked" handler="kalkulaator_window__log_clicked" />
-                    </object>
-                  </child>
-                <child>
                   <object class="GtkButton" id="buttonequal">
                     <property name="label">=</property>
                      <property name="width-request">120</property>
@@ -254,8 +246,15 @@
                   </object>
                 </child>
                 <child>
+                 <object class="GtkButton" id="buttonlog">
+                  <property name="label">log10</property>
+                   <property name="width-request">120</property>
+                  <property name="height-request">50</property>
+                    </object>
+                  </child>
+                <child>
                   <object class="GtkButton" id="buttondot">
-                    <property name="label">,</property>
+                    <property name="label">.</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
                       <signal name="clicked" handler="kalkulaator_window__dot_clicked" />
@@ -319,4 +318,3 @@
     </section>
   </menu>
 </interface>
-
