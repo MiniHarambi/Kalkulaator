@@ -1,0 +1,32 @@
+[
+  {
+    "directory": "/home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/build",
+    "command": "cc -Isrc/kalkulaator.p -Isrc -I../src -I/usr/include/gtk-4.0 -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/fribidi -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/x86_64-linux-gnu -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/graphene-1.0 -I/usr/lib/x86_64-linux-gnu/graphene-1.0/include -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/build -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=gnu11 -g -mfpmath=sse -msse -msse2 -pthread -MD -MQ src/kalkulaator.p/meson-generated_.._kalkulaator-resources.c.o -MF src/kalkulaator.p/meson-generated_.._kalkulaator-resources.c.o.d -o src/kalkulaator.p/meson-generated_.._kalkulaator-resources.c.o -c src/kalkulaator-resources.c",
+    "file": "src/kalkulaator-resources.c",
+    "output": "src/kalkulaator.p/meson-generated_.._kalkulaator-resources.c.o"
+  },
+  {
+    "directory": "/home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/build",
+    "command": "cc -Isrc/kalkulaator.p -Isrc -I../src -I/usr/include/gtk-4.0 -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/fribidi -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/x86_64-linux-gnu -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/graphene-1.0 -I/usr/lib/x86_64-linux-gnu/graphene-1.0/include -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/build -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=gnu11 -g -mfpmath=sse -msse -msse2 -pthread -MD -MQ src/kalkulaator.p/main.c.o -MF src/kalkulaator.p/main.c.o.d -o src/kalkulaator.p/main.c.o -c ../src/main.c",
+    "file": "../src/main.c",
+    "output": "src/kalkulaator.p/main.c.o"
+  },
+  {
+    "directory": "/home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/build",
+    "command": "cc -Isrc/kalkulaator.p -Isrc -I../src -I/usr/include/gtk-4.0 -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/fribidi -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/x86_64-linux-gnu -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/graphene-1.0 -I/usr/lib/x86_64-linux-gnu/graphene-1.0/include -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/build -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=gnu11 -g -mfpmath=sse -msse -msse2 -pthread -MD -MQ src/kalkulaator.p/kalkulaator-window.c.o -MF src/kalkulaator.p/kalkulaator-window.c.o.d -o src/kalkulaator.p/kalkulaator-window.c.o -c ../src/kalkulaator-window.c",
+    "file": "../src/kalkulaator-window.c",
+    "output": "src/kalkulaator.p/kalkulaator-window.c.o"
+  },
+  {
+    "directory": "/home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/build",
+    "command": "cc -Isrc/kalkulaator.p -Isrc -I../src -I/usr/include/gtk-4.0 -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/fribidi -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/x86_64-linux-gnu -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/graphene-1.0 -I/usr/lib/x86_64-linux-gnu/graphene-1.0/include -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/build -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=gnu11 -g -mfpmath=sse -msse -msse2 -pthread -MD -MQ src/kalkulaator.p/kalkulaator-application.c.o -MF src/kalkulaator.p/kalkulaator-application.c.o.d -o src/kalkulaator.p/kalkulaator-application.c.o -c ../src/kalkulaator-application.c",
+    "file": "../src/kalkulaator-application.c",
+    "output": "src/kalkulaator.p/kalkulaator-application.c.o"
+  },
+  {
+    "directory": "/home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/build",
+    "command": "cc -Isrc/kalkulaator.p -Isrc -I../src -I/usr/include/gtk-4.0 -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/fribidi -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/x86_64-linux-gnu -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/graphene-1.0 -I/usr/lib/x86_64-linux-gnu/graphene-1.0/include -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/build -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=gnu11 -g -mfpmath=sse -msse -msse2 -pthread -MD -MQ src/kalkulaator.p/kalkulaator-calc.c.o -MF src/kalkulaator.p/kalkulaator-calc.c.o.d -o src/kalkulaator.p/kalkulaator-calc.c.o -c ../src/kalkulaator-calc.c",
+    "file": "../src/kalkulaator-calc.c",
+    "output": "src/kalkulaator.p/kalkulaator-calc.c.o"
+  }
+]
