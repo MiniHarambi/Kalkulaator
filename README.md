@@ -5,7 +5,7 @@ Esimest korda kasutades tuleb alla laadida Kalkulaator_GTK4 failid zip failina j
 Seejärel tuleb liikuda käsureaga Kalkulator_GTK4 kausta.
 Nüüd sisesta järgnevad neli käsku käsureale:
 
-meson --prefix=$PWD/install build
+meson --prefix=$PWD/install build \n
 cd build
 ninja
 ninja install
