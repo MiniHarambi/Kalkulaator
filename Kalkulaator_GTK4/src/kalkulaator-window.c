@@ -113,7 +113,7 @@ static void kalkulaator_window__dot_clicked(GtkButton *button, gpointer user_dat
   KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
 
   // Append a dot to the expression
-  gchar *dot = ",";
+  gchar *dot = ".";
   gchar *updated_expression = g_strconcat(window->expression, dot, NULL);
   g_free(window->expression);
   window->expression = updated_expression;
@@ -273,51 +273,7 @@ static void kalkulaator_window__sulg2_clicked(GtkButton *button, gpointer user_d
   // Update the display
   gtk_editable_set_text(GTK_EDITABLE(window->display), window->expression);
 }
-/*
-static void kalkulaator_window__equal_clicked(GtkButton *button, gpointer user_data)
-{
-  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
 
-
-  gtk_editable_get_text(GTK_EDITABLE(window->display));
-  g_print("Expression: %s\n", window->expression);
-  g_free(window->expression);
-  window->expression = NULL;
-
-
-}
- */
-/*
-static void kalkulaator_window__equal_clicked(GtkButton *button, gpointer user_data)
-{
-  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
-
-  // Get the text from the entry widget
-  gtk_editable_get_text(GTK_EDITABLE(window->display));
-
-  // Print the result
-  g_print("Expression: %s\n", window->display);
-
-  // Clear the entry widget after evaluating
-  gtk_editable_set_text(GTK_EDITABLE(window->display), "");
-}
- */
-/*
-static void kalkulaator_window__equal_clicked(GtkButton *button, gpointer user_data)
-{
-    KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
-
-    // Get the text from the entry widget
-    const gchar *text = gtk_editable_get_text(GTK_EDITABLE(window->display));
-    gchar *result = CalcMain((char*)text);
-    // Print the result
-    //g_print("Expression: %s\n", text);
-
-    // Clear the entry widget after evaluating
-    gtk_editable_set_text(GTK_EDITABLE(window->display), result);
-    g_free(result);
-}
- */
 
 static void kalkulaator_window__equal_clicked(GtkButton *button, gpointer user_data)
 {
@@ -334,7 +290,14 @@ static void kalkulaator_window__equal_clicked(GtkButton *button, gpointer user_d
     // Print the result on the display
     gtk_editable_set_text(GTK_EDITABLE(window->display), result);
     g_free(result);
+
+    // Clear the expression if it's not already empty
+    if (strlen(window->expression) > 0) {
+        g_free(window->expression);
+        window->expression = g_strdup("");
+    }
 }
+
 
 static void kalkulaator_window__log_clicked(GtkButton *button, gpointer user_data)
 {
@@ -417,6 +380,5 @@ kalkulaator_window_init (KalkulaatorWindow *self)
   g_signal_connect(self->buttonequal, "clicked", G_CALLBACK(kalkulaator_window__equal_clicked), self);
   g_signal_connect(self->buttonlog, "clicked", G_CALLBACK(kalkulaator_window__equal_clicked), self);
 }
-
 
 
