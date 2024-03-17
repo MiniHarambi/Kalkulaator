@@ -1,5 +1,0 @@
-[options]
-prefix = /home/miniharambi/Desktop/Kalk/Kalkulaator_GTK4/install
-
-[properties]
-
