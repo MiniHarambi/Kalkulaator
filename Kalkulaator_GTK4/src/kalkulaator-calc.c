@@ -6,6 +6,25 @@
 #include "kalkulaator-calc.h"
 #include "kalkulaator-window.h"
 
+void type__file(const gchar *content)
+{
+    const char *filepath = "Desktop/Kalk/Kalkulaator_GTK4/src/History.txt";
+    FILE *fOut = fopen(filepath, "at+");
+    if (fOut == NULL)
+    {
+      g_print("Error opening file for writing\n");
+      return;
+    }
+
+    // Write content to the file
+    fprintf(fOut, "%s", content);
+
+    // Close the file
+    fclose(fOut);
+
+    g_print("Content written to file.\n");
+}
+
 // Function implementations
 void initialize(Stack *s) {
     s->top = -1;
@@ -118,6 +137,30 @@ double evaluateExpression(char *expr, int start, int end) {
             }
             push(&operator_stack, expr[i]);
         }
+        else if (expr[i] == 'L') {
+            int j = i + 1; // Move past the 'L'
+            int base = 0;
+            while (isdigit(expr[j])) {
+                base = base * 10 + (expr[j] - '0');
+                j++;
+            }
+            if (expr[j] != '(') {
+                printf("Invalid expression: unable to find opening parenthesis for logarithm\n");
+                exit(EXIT_FAILURE);
+            }
+            int k = j + 1;
+            int count = 1; // Parentheses count
+            while (count != 0) {
+                if (expr[k] == '(') count++;
+                else if (expr[k] == ')') count--;
+                k++;
+            }
+            double operand = evaluateExpression(expr, j + 1, k - 1);
+
+            double result = applyCustomLog(operand, base);
+            push(&operand_stack, result);
+            i = k; // Move i past the processed logarithm expression
+        }
         else if (expr[i] == 'l' || expr[i] == 'r') {
             int j = i + 1;
             while (expr[j] != '(') j++;
@@ -156,8 +199,17 @@ double evaluateInfix(char *expr) {
     return evaluateExpression(expr, 0, strlen(expr));
 }
 
+double applyCustomLog(double operand, double base) {
+    if (operand <= 0 || base <= 0 || base == 1) {
+        printf("Invalid arguments for logarithm\n");
+        exit(EXIT_FAILURE);
+    }
+    return log2(operand) / log2(base);
+}
+
 gchar *CalcMain(char *expr) {
     double result = evaluateInfix(expr);
-    return g_strdup_printf("%.2f", result);
+
+    return g_strdup_printf("%g", result);
 }
 
