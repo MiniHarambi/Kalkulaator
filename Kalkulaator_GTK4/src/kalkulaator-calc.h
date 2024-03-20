@@ -25,12 +25,12 @@ G_BEGIN_DECLS
 
 #define KALKULAATOR_TYPE_CALC
 
- #define MAX_SIZE 100
+ #define MAX_SIZE 1000
 
 // Stack structure
 typedef struct {
-    double items[MAX_SIZE];
     int top;
+    double items[MAX_SIZE];
 } Stack;
 
 // Function prototypes
@@ -43,5 +43,6 @@ double applyOperator(double op1, double op2, char operatorr);
 double evaluateExpression(char *expr, int start, int end);
 double evaluateInfix(char *expr);
 gchar *CalcMain(char *expr);
-
+void type__file(const gchar *content);
+double applyCustomLog(double operand, double base);
 G_END_DECLS
