@@ -24,6 +24,52 @@ G_BEGIN_DECLS
 
 #define KALKULAATOR_TYPE_WINDOW (kalkulaator_window_get_type())
 
+struct _KalkulaatorWindow
+{
+  GtkApplicationWindow  parent_instance;
+
+  /* Template widgets */
+  GtkHeaderBar        *header_bar;
+  GtkLabel            *label;
+  GtkWindow           *gtk_window;
+  GtkBox              *main_box;
+  GtkEntry            *display;
+  GtkEntry            *display2;
+
+  GtkButton           *button0;
+  GtkButton           *button1;
+  GtkButton           *button2;
+  GtkButton           *button3;
+  GtkButton           *button4;
+  GtkButton           *button5;
+  GtkButton           *button6;
+  GtkButton           *button7;
+  GtkButton           *button8;
+  GtkButton           *button9;
+
+  GtkButton           *buttonclear;
+  GtkButton           *buttondelete;
+  GtkButton           *buttondot;
+  GtkButton           *buttonadd;
+  GtkButton           *buttonsubtract;
+  GtkButton           *buttonmultiply;
+  GtkButton           *buttondivide;
+  GtkButton           *buttonsqrt;
+  GtkButton           *buttonsquare;
+  GtkButton           *buttonhistory;
+  GtkButton           *buttonans;
+  GtkButton           *buttonsulg1;
+  GtkButton           *buttonsulg2;
+  GtkButton           *buttonequal;
+  GtkButton           *buttonlog;
+  //GtkToggleButton     *togglebutton;
+  //GtkButton           *xtrabutton1;
+  //GtkButton           *xtrabutton2;
+  //
+  gchar               *expression;
+  gchar               *last_result;
+  };
+
 G_DECLARE_FINAL_TYPE (KalkulaatorWindow, kalkulaator_window, KALKULAATOR, WINDOW, GtkApplicationWindow)
 
 G_END_DECLS
