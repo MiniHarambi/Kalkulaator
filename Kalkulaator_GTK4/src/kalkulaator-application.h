@@ -29,4 +29,5 @@ G_DECLARE_FINAL_TYPE (KalkulaatorApplication, kalkulaator_application, KALKULAAT
 KalkulaatorApplication *kalkulaator_application_new (gchar *application_id,
                                                      GApplicationFlags  flags);
 
+
 G_END_DECLS

@@ -6,10 +6,12 @@ kalkulaator_sources = [
   'kalkulaator-application.h',
   'kalkulaator-window.h',
   'kalkulaator-calc.h',
+  'programming-window.c',
+  'programming-window.h',
 ]
 
 kalkulaator_deps = [
-  dependency('gtk4'),
+  dependency('gtk4', 'lm'),
 ]
 
 gnome = import('gnome')

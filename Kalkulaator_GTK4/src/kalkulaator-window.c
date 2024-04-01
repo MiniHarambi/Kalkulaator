@@ -21,8 +21,7 @@
 #include "kalkulaator-calc.h"
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
-#include <stdio.h>
-#include <stdlib.h>
+
 
 
 G_DEFINE_TYPE (KalkulaatorWindow, kalkulaator_window, GTK_TYPE_APPLICATION_WINDOW);
@@ -30,6 +29,7 @@ G_DEFINE_TYPE (KalkulaatorWindow, kalkulaator_window, GTK_TYPE_APPLICATION_WINDO
 
 static void kalkulaator_window__nr_clicked(GtkButton *button, gpointer user_data)
 {
+
     KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
     const gchar* text = gtk_button_get_label(button);
     /*
@@ -70,7 +70,7 @@ static void kalkulaator_window__clear_clicked(GtkButton *button, gpointer user_d
     window->expression = g_strdup("");
     g_print("clear button");
     // Update the display
-    gtk_editable_set_text(GTK_EDITABLE(window->display), "");
+    gtk_editable_set_text(GTK_EDITABLE(window->display), "0");
 }
 
 
@@ -88,6 +88,10 @@ static void kalkulaator_window__delete_clicked(GtkButton *button, gpointer user_
         // Update the display
         gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
         g_free(updated_text);
+    }
+    else
+    {
+      gtk_editable_set_text(GTK_EDITABLE(window->display), "0");
     }
 }
 static void kalkulaator_window__dot_clicked(GtkButton *button, gpointer user_data)
@@ -143,8 +147,8 @@ static void kalkulaator_window__divide_clicked(GtkButton *button, gpointer user_
   KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
 
   // Append a division sign to the expression
-  gchar *divide = "/";
-   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *divide = "/";
+    const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
     gchar *updated_text = g_strconcat(current_text, divide, NULL);
     gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
     g_free(updated_text);
@@ -191,12 +195,96 @@ static void open_history_file()
   system(command);
 
 }
+/*
+static void show_history_dialog(GtkWidget *parent) {
+    // Create a new dialog window
+    GtkWidget *dialog = gtk_dialog_new();
+
+    // Create a text view to display the history content
+    GtkWidget *text_view = gtk_text_view_new();
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
+    gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_view), GTK_WRAP_WORD_CHAR);
+
+    // Create a scrolled window to hold the text view
+    GtkWidget *scrolled_window = gtk_scrolled_window_new();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolled_window), text_view);
+
+    // Load history content into the text view (replace this with your history content loading logic)
+    const gchar *history_content = "his\nto\ry\n";
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+    gtk_text_buffer_set_text(buffer, history_content, -1);
+
+    // Set the size of the scrolled window
+    gtk_widget_set_size_request(scrolled_window, 400, 300); // Adjust the size as per your requirement
+
+    // Add the scrolled window to the dialog's content area
+    GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+    gtk_box_append(GTK_BOX(content_area), scrolled_window);
+
+    // Show the dialog
+    gtk_widget_show(dialog);
+}
+ */
+static void show_history_dialog(GtkWidget *parent)
+{
+    // Create a new dialog window
+    GtkWidget *dialog = gtk_dialog_new();
+
+    gtk_window_set_title(GTK_WINDOW(dialog), "History");
+
+    // Create a text view to display the history content
+    GtkWidget *text_view = gtk_text_view_new();
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
+    gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_view), GTK_WRAP_WORD_CHAR);
+
+    // Create a scrolled window to hold the text view
+    GtkWidget *scrolled_window = gtk_scrolled_window_new();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolled_window), text_view);
+
+    // Read content from file
+    FILE *file = fopen("Desktop/Kalk/Kalkulaator_GTK4/src/History.txt", "r");
+    if (file == NULL)
+      {
+        g_warning("Failed to open file.");
+        return;
+    }
+
+    fseek(file, 0, SEEK_END);
+    long file_size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    char *buffer = g_malloc(file_size + 1);
+    fread(buffer, 1, file_size, file);
+    buffer[file_size] = '\0';
+    fclose(file);
+
+    // Load content into the text view
+    GtkTextBuffer *text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+    gtk_text_buffer_set_text(text_buffer, buffer, -1);
+    g_free(buffer);
+
+    // Set the size of the scrolled window
+    gtk_widget_set_size_request(scrolled_window, 400, 300); // Adjust the size as per your requirement
+
+    // Add the scrolled window to the dialog's content area
+    GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+    gtk_box_append(GTK_BOX(content_area), scrolled_window);
+
+    // Show the dialog
+    gtk_widget_show(dialog);
+}
+
+
 static void kalkulaator_window__history_clicked(GtkButton *button, gpointer user_data)
 {
   // Functionality for the history button
   g_print("History button clicked.\n");
 
   KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+  show_history_dialog(GTK_WIDGET(window));
+
 /*
   GtkWidget *popover = gtk_popover_new();
   GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -227,7 +315,8 @@ static void kalkulaator_window__history_clicked(GtkButton *button, gpointer user
 
   gtk_popover_popup(GTK_POPOVER(popover));
    */
- open_history_file();
+
+ //open_history_file();
 }
 
 static void kalkulaator_window__ans_clicked(GtkButton *button, gpointer user_data)
@@ -290,22 +379,31 @@ static void kalkulaator_window__equal_clicked(GtkButton *button, gpointer user_d
 
     // Get the text from the display widget
     const gchar *text = gtk_editable_get_text(GTK_EDITABLE(window->display));
-    type__file((gchar*)text);
-    type__file((gchar*)" = ");
-    // Calculate the result
-    gchar *result = CalcMain((char*)text);
-    type__file(result);
-    type__file((gchar*)"\n");
-    gtk_editable_set_text(GTK_EDITABLE(window->display2), text);
+    if (strlen(text) == 0)
+    {
+      gtk_editable_set_text(GTK_EDITABLE(window->display), "0");
+    }
+    else
+    {
 
-   //gtk_print_operation_set_export_filename( )
-    // Store the result as the last result
-    g_free(window->last_result);
-    window->last_result = g_strdup(result);
+      type__file((gchar*)text);
+      type__file((gchar*)" = ");
+      // Calculate the result
+      gchar *result = CalcMain((char*)text);
+      type__file(result);
+      type__file((gchar*)"\n");
+      gtk_editable_set_text(GTK_EDITABLE(window->display2), text);
 
-    // Print the result on the display
-    gtk_editable_set_text(GTK_EDITABLE(window->display), result);
-    g_free(result);
+     //gtk_print_operation_set_export_filename( )
+      // Store the result as the last result
+      g_free(window->last_result);
+      window->last_result = g_strdup(result);
+
+      // Print the result on the display
+      gtk_editable_set_text(GTK_EDITABLE(window->display), result);
+      g_free(result);
+    }
+
 }
 
 
@@ -336,8 +434,11 @@ void history_delete()
     // Close the file
     fclose(fOut);
 }
+
+
 /*
-static void kalkulaator_window__toggle_button_toggled(GtkToggleButton *toggle_button, gpointer user_data)
+static void kalkulaator_window__toggle_button_toggled(GtkToggleButton *toggle_button,
+                                                      gpointer user_data)
 {
     KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
     gboolean active = gtk_toggle_button_get_active(toggle_button);
@@ -347,28 +448,129 @@ static void kalkulaator_window__toggle_button_toggled(GtkToggleButton *toggle_bu
         // Show additional buttons
         gtk_widget_set_visible(GTK_WIDGET(window->xtrabutton1), TRUE);
         gtk_widget_set_visible(GTK_WIDGET(window->xtrabutton2), TRUE);
+        gtk_widget_set_visible(GTK_WIDGET(window->xtrabutton3), FALSE);
+        gtk_widget_set_visible(GTK_WIDGET(window->xtrabutton4), FALSE);
+        gtk_widget_set_visible(GTK_WIDGET(window->xtrabutton5), FALSE);
     }
     else
     {
         // Hide additional buttons
         gtk_widget_set_visible(GTK_WIDGET(window->xtrabutton1), FALSE);
         gtk_widget_set_visible(GTK_WIDGET(window->xtrabutton2), FALSE);
+        gtk_widget_set_visible(GTK_WIDGET(window->xtrabutton3), FALSE);
+        gtk_widget_set_visible(GTK_WIDGET(window->xtrabutton4), FALSE);
+        gtk_widget_set_visible(GTK_WIDGET(window->xtrabutton5), FALSE);
     }
 }
-
-
-static void kalkulaator_window_xtrabutton1_clicked(GtkButton *data, gpointer user_data)
-{
-  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
-  g_print("xtrabutton clicked");
-}
-static void kalkulaator_window_xtrabutton2_clicked(GtkButton *data, gpointer user_data)
-{
-  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
-  g_print("xtrabutton clicked");
-}
-
  */
+
+
+static void kalkulaator_window__buttonfact_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+
+  gchar *fact = "!";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, fact, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+}
+static void kalkulaator_window__xtrabutton2_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+  g_print("xxtrabutton clicked");
+}
+static void kalkulaator_window__xtrabutton3_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+  gchar *pi = "pi";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, pi, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+
+}
+static void kalkulaator_window__xtrabutton4_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+
+  // Append the square function to the expression
+  gchar *logx = "log_";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, logx, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+}
+static void kalkulaator_window__xtrabutton5_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+  g_print("xxxxxtrabutton clicked");
+}
+
+
+static void kalkulaator_window__sin_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+
+  gchar *sin = "sin(";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, sin, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+}
+static void kalkulaator_window__arcsin_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+
+  gchar *asin = "asin(";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, asin, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+
+}
+static void kalkulaator_window__cos_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+
+  gchar *cos = "cos(";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, cos, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+}
+static void kalkulaator_window__arccos_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+
+  gchar *acos = "acos(";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, acos, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+}
+static void kalkulaator_window__tan_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+
+  gchar *tan = "tan(";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, tan, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+}
+static void kalkulaator_window__arctan_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+
+  gchar *atan = "atan(";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, atan, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+}
+
+
 
 static void kalkulaator_window_class_init (KalkulaatorWindowClass *klass)
 {
@@ -379,7 +581,7 @@ static void kalkulaator_window_class_init (KalkulaatorWindowClass *klass)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS(klass), KalkulaatorWindow, header_bar);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS(klass), KalkulaatorWindow, display);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS(klass), KalkulaatorWindow, display2);
- //gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS(klass), KalkulaatorWindow, togglebutton);
+  //gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS(klass), KalkulaatorWindow, togglebutton);
   // Bind other template children as needed
 
   // Bind signal handlers
@@ -399,9 +601,23 @@ static void kalkulaator_window_class_init (KalkulaatorWindowClass *klass)
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__sulg2_clicked);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__equal_clicked);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__log_clicked);
- //// gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__toggle_button_toggled);
-  //gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window_xtrabutton1_clicked);
-  //gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window_xtrabutton2_clicked);
+
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__sin_clicked);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__arcsin_clicked);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__cos_clicked);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__arccos_clicked);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__tan_clicked);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__arctan_clicked);
+
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__buttonfact_clicked);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__xtrabutton2_clicked);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__xtrabutton3_clicked);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__xtrabutton4_clicked);
+  /*
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__toggle_button_toggled);
+
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window_xtrabutton5_clicked);
+   */
 
 }
 
@@ -413,6 +629,7 @@ kalkulaator_window_init (KalkulaatorWindow *self)
 
   g_print("initializing display widget: %p\n", (void*) self->display);
   //self->display = g_strdup("");
+  gtk_editable_set_text(GTK_EDITABLE(self->display), "0");
 
 
   g_signal_connect(self->button0, "clicked", G_CALLBACK(kalkulaator_window__nr_clicked), self);
@@ -442,10 +659,30 @@ kalkulaator_window_init (KalkulaatorWindow *self)
   g_signal_connect(self->buttonsulg2, "clicked", G_CALLBACK(kalkulaator_window__sulg2_clicked), self);
   g_signal_connect(self->buttonequal, "clicked", G_CALLBACK(kalkulaator_window__equal_clicked), self);
   g_signal_connect(self->buttonlog, "clicked", G_CALLBACK(kalkulaator_window__log_clicked), self);
-  //g_signal_connect(self->togglebutton, "toggled", G_CALLBACK(kalkulaator_window__toggle_button_toggled), self);
-  //g_signal_connect(self->xtrabutton1, "clicked", G_CALLBACK(kalkulaator_window_xtrabutton1_clicked), self);
-  //g_signal_connect(self->xtrabutton2, "clicked", G_CALLBACK(kalkulaator_window_xtrabutton2_clicked), self);
-  //gtk_editable_set_position(GTK_EDITABLE(self->display), +0);
+  g_signal_connect(self->buttonsin, "clicked", G_CALLBACK(kalkulaator_window__sin_clicked), self);
+  g_signal_connect(self->buttonarcsin, "clicked", G_CALLBACK(kalkulaator_window__arcsin_clicked), self);
+  g_signal_connect(self->buttoncos, "clicked", G_CALLBACK(kalkulaator_window__cos_clicked), self);
+  g_signal_connect(self->buttonarccos, "clicked", G_CALLBACK(kalkulaator_window__arccos_clicked), self);
+  g_signal_connect(self->buttontan, "clicked", G_CALLBACK(kalkulaator_window__tan_clicked), self);
+  g_signal_connect(self->buttonarctan, "clicked", G_CALLBACK(kalkulaator_window__arctan_clicked), self);
 
+  g_signal_connect(self->buttonfact, "clicked", G_CALLBACK(kalkulaator_window__buttonfact_clicked), self);
+  g_signal_connect(self->xtrabutton2, "clicked", G_CALLBACK(kalkulaator_window__xtrabutton2_clicked), self);
+  g_signal_connect(self->xtrabutton3, "clicked", G_CALLBACK(kalkulaator_window__xtrabutton3_clicked), self);
+  g_signal_connect(self->xtrabutton4, "clicked", G_CALLBACK(kalkulaator_window__xtrabutton4_clicked), self);
+
+  /*
+  g_signal_connect(self->togglebutton, "toggled", G_CALLBACK(kalkulaator_window__toggle_button_toggled), self);
+
+  g_signal_connect(self->xtrabutton5, "clicked", G_CALLBACK(kalkulaator_window_xtrabutton5_clicked), self);
+   */
+  //gtk_editable_set_position(GTK_EDITABLE(self->display), +0);
+  /*
+  gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton1), FALSE);
+  gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton2), FALSE);
+  gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton3), FALSE);
+  gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton4), FALSE);
+  gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton5), FALSE);
+   */
    history_delete();
 }

@@ -4,20 +4,24 @@
   <template class="KalkulaatorWindow" parent="GtkApplicationWindow">
     <property name="default-width">610</property>
     <property name="default-height">460</property>
+    <property name="title">Calculator</property>
     <property name="resizable">True</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
         <child type="start">
-         <!-- <object class="GtkToggleButton" id="toggle_button">
-            <property name="label">More Options</property>
-            <property name="valign">start</property>
-            <property name="vexpand">false</property>
-          </object>-->
-          <object class="GtkMenuButton">
+           <object class="GtkMenuButton">
             <property name="label">modes</property>
             <property name="menu-model">window_menu</property>
           </object>
         </child>
+<!-- <child type="start">
+          <object class="GtkToggleButton" id="toggle_button">
+            <property name="label">More</property>
+            <property name="valign">center</property>
+            <property name="vexpand">false</property>
+            <signal name="toggled" handler="on_toggle_button_toggled" object="toggle_button" />
+          </object>
+        </child> -->
         <child type="end">
           <object class="GtkMenuButton">
             <property name="icon-name">open-menu-symbolic</property>
@@ -53,15 +57,148 @@
                    <child>
                   <object class="GtkEntry" id="display2">
                     <property name="editable">False</property>
-                    <property name="width-request">610</property>
+                    <property name="width-request">608</property>
                     <property name="height-request">50</property>
                  </object>
                 </child>
 
               </object>
             </child>
+
         <child>
           <object class="GtkBox" id="row3">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <child>
+                  <object class="GtkButton" id="buttonsin">
+                    <property name="label">sin</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                    <signal name="clicked" handler="kalkulaator_window__sin_clicked"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="buttoncos">
+                    <property name="label">cos</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                    <signal name="clicked" handler="kalkulaator_window__cos_clicked" />
+                  </object>
+                </child>
+                <child>
+                 <object class="GtkButton" id="buttontan">
+                  <property name="label">tan</property>
+                   <property name="width-request">120</property>
+                  <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                   <signal name="clicked" handler="kalkulaator_window__tan_clicked" />
+                    </object>
+                </child>
+              <child>
+                <object class="GtkButton" id="buttonfact">
+                  <property name="label">!</property>
+                  <property name="width-request">120</property>
+                  <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                  <signal name="clicked" handler="kalkulaator_window__buttonfact_clicked" />
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="buttonhistory">
+                    <property name="icon-name">view-refresh-symbolic</property>
+                    <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                      <signal name="clicked" handler="kalkulaator_window__history_clicked" />
+                   </object>
+                  </child>
+                </object>
+              </child>
+
+          <child>
+          <object class="GtkBox" id="row4">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <child>
+                  <object class="GtkButton" id="buttonarcsin">
+                    <property name="label">asin</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                    <signal name="clicked" handler="kalkulaator_window__arcsin_clicked"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="buttonarccos">
+                    <property name="label">acos</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                    <signal name="clicked" handler="kalkulaator_window__arccos_clicked" />
+                  </object>
+                </child>
+                <child>
+                 <object class="GtkButton" id="buttonarctan">
+                  <property name="label">atan</property>
+                   <property name="width-request">120</property>
+                  <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                   <signal name="clicked" handler="kalkulaator_window__arctan_clicked" />
+                    </object>
+                </child>
+              <child>
+                <object class="GtkButton" id="xtrabutton3">
+                  <property name="label">π</property>
+                  <property name="width-request">120</property>
+                  <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                  <signal name="clicked" handler="kalkulaator_window__xtrabutton3_clicked" />
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="xtrabutton4">
+                    <property name="label">log_x</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                      <signal name="clicked" handler="kalkulaator_window__xtrabutton4_clicked" />
+                   </object>
+                  </child>
+                </object>
+              </child>
+
+        <child>
+          <object class="GtkBox" id="row5">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                 <child>
                   <object class="GtkButton" id="buttonsquare">
@@ -89,7 +226,7 @@
                 </child>
                 <child>
                  <object class="GtkButton" id="buttonlog">
-                  <property name="label">log10</property>
+                  <property name="label">log</property>
                    <property name="width-request">120</property>
                   <property name="height-request">50</property>
                     <property name="margin-start">1</property>
@@ -122,13 +259,12 @@
                     <property name="margin-bottom">1</property>
                       <signal name="clicked" handler="kalkulaator_window__sulg2_clicked" />
                   </object>
-                </child>
-
-              </object>
-            </child>
+                  </child>
+                </object>
+              </child>
 
         <child>
-          <object class="GtkBox" id="row4">
+          <object class="GtkBox" id="row6">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkButton" id="button9">
@@ -194,7 +330,7 @@
               </child>
 
         <child>
-          <object class="GtkBox" id="row5">
+          <object class="GtkBox" id="row7">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkButton" id="button4">
@@ -260,7 +396,7 @@
               </child>
 
         <child>
-          <object class="GtkBox" id="row6">
+          <object class="GtkBox" id="row8">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkButton" id="button1">
@@ -326,12 +462,12 @@
               </child>
 
         <child>
-          <object class="GtkBox" id="row7">
+          <object class="GtkBox" id="row9">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
               <object class="GtkButton" id="button0">
                 <property name="label">0</property>
-                 <property name="width-request">120</property>
+                 <property name="width-request">240</property>
                 <property name="height-request">50</property>
                     <property name="margin-start">1</property>
                     <property name="margin-end">1</property>
@@ -376,21 +512,75 @@
                         <signal name="clicked" handler="kalkulaator_window__ans_clicked" />
                     </object>
                   </child>
+
+       <!-- <child>
+          <object class="GtkBox" id="row8">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <child>
+              <object class="GtkButton" id="xtrabutton1">
+                <property name="label">xtra</property>
+                 <property name="width-request">120</property>
+                <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                  <signal name="clicked" handler="kalkulaator_window_xtrabutton1_clicked" />
+                  </object>
+                </child>
                 <child>
-                  <object class="GtkButton" id="buttonhistory">
-                    <property name="icon-name">view-refresh-symbolic</property>
+                  <object class="GtkButton" id="xtrabutton2">
+                    <property name="label">xxtra</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                      <signal name="clicked" handler="kalkulaator_window_xtrabutton2_clicked" />
+                    </object>
+                  </child>
+                <child>
+                  <object class="GtkButton" id="xtrabutton3">
+                    <property name="label">xxxtra</property>
+                     <property name="width-request">120</property>
+                    <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                    <signal name="clicked" handler="kalkulaator_window_xtrabutton3_clicked" />
+                  </object>
+                </child>
+                  <child>
+                    <object class="GtkButton" id="xtrabutton4">
+                      <property name="label">xxxxtra</property>
+                       <property name="width-request">120</property>
+                      <property name="height-request">50</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
+                    <property name="margin-top">1</property>
+                    <property name="margin-bottom">1</property>
+                        <signal name="clicked" handler="kalkulaator_window_xtrabutton4_clicked" />
+                    </object>
+                  </child>
+                <child>
+                  <object class="GtkButton" id="xtrabutton5">
+                    <property name="label">xxxxxtra</property>
                     <property name="width-request">120</property>
                     <property name="height-request">50</property>
                     <property name="margin-start">1</property>
                     <property name="margin-end">1</property>
                     <property name="margin-top">1</property>
                     <property name="margin-bottom">1</property>
-                      <signal name="clicked" handler="kalkulaator_window__history_clicked" />
+                      <signal name="clicked" handler="kalkulaator_window_xtrabutton5_clicked" />
                   </object>
                 </child>
               </object>
+              </child> -->
+            </object>
               </child>
-         </object>
+          </object>
         </child>
   </template>
 
@@ -398,22 +588,15 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">_Basic</attribute>
-        <attribute name="action">app.basic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Scientific</attribute>
         <attribute name="action">app.scientific</attribute>
-        <attribute name="target">scientific</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Programming</attribute>
+        <attribute name="label" translatable="yes">_Bitmask</attribute>
         <attribute name="action">app.programming</attribute>
-        <attribute name="target">programming</attribute>
       </item>
        <item>
-        <attribute name="label" translatable="yes">Converter</attribute>
+        <attribute name="label" translatable="yes">_Converter</attribute>
         <attribute name="action">app.converter</attribute>
-        <attribute name="target">converter</attribute>
       </item>
     </section>
   </menu>
@@ -421,10 +604,6 @@
 
 <menu id="primary_menu">
     <section>
-      <item>
-        <attribute name="label" translatable="yes">Programming</attribute>
-        <attribute name="action">win.programming</attribute>
-      </item>
       <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
@@ -442,3 +621,4 @@
 
 
 </interface>
+

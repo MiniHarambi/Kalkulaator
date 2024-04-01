@@ -3,5 +3,7 @@
   <gresource prefix="/org/github/kalkulaator">
     <file>kalkulaator-window.ui</file>
     <file>gtk/help-overlay.ui</file>
+    <file>gtk/programming-overlay.ui</file>
+    <file>programming-window.ui</file>
   </gresource>
 </gresources>

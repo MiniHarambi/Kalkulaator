@@ -62,9 +62,22 @@ struct _KalkulaatorWindow
   GtkButton           *buttonsulg2;
   GtkButton           *buttonequal;
   GtkButton           *buttonlog;
-  //GtkToggleButton     *togglebutton;
-  //GtkButton           *xtrabutton1;
-  //GtkButton           *xtrabutton2;
+  GtkButton           *buttonsin;
+  GtkButton           *buttoncos;
+  GtkButton           *buttontan;
+  GtkButton           *buttonarcsin;
+  GtkButton           *buttonarccos;
+  GtkButton           *buttonarctan;
+  GtkButton           *xtrabutton1;
+  GtkButton           *xtrabutton2;
+  GtkButton           *xtrabutton3;
+  GtkButton           *xtrabutton4;
+  GtkButton           *buttonfact;
+  /*
+  GtkToggleButton     *togglebutton;
+
+  GtkButton           *xtrabutton5;
+   */
   //
   gchar               *expression;
   gchar               *last_result;

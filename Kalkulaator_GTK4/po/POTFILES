@@ -4,4 +4,5 @@ data/org.github.kalkulaator.gschema.xml
 src/kalkulaator-window.ui
 src/main.c
 src/kalkulaator-window.c
+src/kalkulaator-calc.c
 

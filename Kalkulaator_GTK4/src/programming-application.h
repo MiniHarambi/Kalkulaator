@@ -1,4 +1,4 @@
-/* kalkulaator-window.h
+/* programming-application.h
  *
  * Copyright 2024 Markus Parm
  *
@@ -18,34 +18,18 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include "programming-window.h"
 #include "kalkulaator-window.h"
 
 G_BEGIN_DECLS
 
-#define KALKULAATOR_TYPE_CALC
+#define PROGRAMMING_TYPE_APPLICATION (programming_application_get_type())
 
- #define MAX_SIZE 1000
- #define M_PI 3.14159265358979323846
-// Stack structure
-typedef struct {
-    int top;
-    double items[MAX_SIZE];
-    char errorMessage[MAX_SIZE];
-} Stack;
+G_DECLARE_FINAL_TYPE (ProgrammingApplication, programming_application, PROGRAMMING, APPLICATION, GtkApplication)
 
-// Function prototypes
-void initialize(Stack *s);
-int isEmpty(Stack *s);
-void push(Stack *s, double value);
-double pop(Stack *s);
-int precedence(char op);
-double applyOperator(double op1, double op2, char operatorr);
-double evaluateExpression(char *expr, int start, int end);
-double evaluateInfix(char *expr);
-gchar *CalcMain(char *expr);
-void type__file(const gchar *content);
-double applyCustomLog(double operand, double base);
-double factorialOfNum(int n);
-gchar *ErrorMessage(int error);
+ProgrammingApplication *programming_application_new (gchar *application_id,
+                                                     GApplicationFlags  flags);
+
+
 G_END_DECLS
+
