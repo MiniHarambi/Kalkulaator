@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+
+  <object class="GtkApplicationWindow" id="main_window">
+    <property name="default-width">610</property>
+    <property name="default-height">460</property>
+    <property name="title">Bitmask</property>
+    <property name="resizable">True</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header_bar">
+        <child type="start">
+           <object class="GtkMenuButton">
+            <property name="label">modes</property>
+            <property name="menu-model">window_menu</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton">
+            <property name="icon-name">open-menu-symbolic</property>
+            <property name="menu-model">primary_menu</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkGrid">
+        <child>
+          <object class="GtkEntry" id="display1">
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">10</property>
+            <property name="margin-bottom">10</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="display2">
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">10</property>
+            <property name="margin-bottom">10</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+
+  <menu id="window_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Basic</attribute>
+        <attribute name="action">app.scientific</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Bitmask</attribute>
+        <attribute name="action">app.programming</attribute>
+      </item>
+       <item>
+        <attribute name="label" translatable="yes">_Converter</attribute>
+        <attribute name="action">app.converter</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="primary_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About kalkulaator</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
+
