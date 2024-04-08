@@ -390,6 +390,7 @@ gchar *ErrorMessage(int error)
 }
 
 gchar *CalcMain(char *expr, double x, double y) {
+    error = 0;
     gchar *result_string;
     double calculated_result = evaluateInfix(expr, x, y);
     if (error != 0) {
