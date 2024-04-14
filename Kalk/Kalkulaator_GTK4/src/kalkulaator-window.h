@@ -74,6 +74,7 @@ struct _KalkulaatorWindow
   GtkButton           *xtrabutton3;
   GtkButton           *xtrabutton4;
   GtkButton           *buttonfact;
+  GtkButton           *bitmask;
 
   GtkToggleButton     *togglebutton;
   GtkToggleButton     *xVal;
