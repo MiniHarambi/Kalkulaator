@@ -9,9 +9,9 @@
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
         <child type="start">
-           <object class="GtkMenuButton">
-            <property name="label">modes</property>
-            <property name="menu-model">window_menu</property>
+           <object class="GtkButton" id="bitmask">
+            <property name="label">bitmask</property>
+            <signal name="clicked" handler="kalkulaator_window__bitmask_clicked"/>
           </object>
         </child>
      <!--<child type="start">
@@ -57,12 +57,13 @@
               <object class="GtkBox" id="row2">
                 <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
                   <child>
-                  <object class="GtkToggleButton" id="xVal">
+                  <object class="GtkButton" id="xVal">
                     <property name="label">x =</property>
                     <property name="width-request">50</property>
                     <property name="height-request">50</property>
                     <property name="hexpand">true</property>
                     <property name="vexpand">true</property>
+                    <signal name="clicked" handler="kalkulaator_window__xVal_clicked"/>
                  </object>
                 </child>
                 <child>
@@ -76,12 +77,13 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkToggleButton" id="yVal">
+                  <object class="GtkButton" id="yVal">
                     <property name="label">y =</property>
                     <property name="width-request">50</property>
                     <property name="height-request">50</property>
                     <property name="hexpand">true</property>
                     <property name="vexpand">true</property>
+                    <signal name="clicked" handler="kalkulaator_window__yVal_clicked"/>
                  </object>
                 </child>
                 <child>
@@ -689,4 +691,3 @@
 
 
 </interface>
-
