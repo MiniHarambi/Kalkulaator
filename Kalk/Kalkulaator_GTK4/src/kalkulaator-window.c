@@ -22,10 +22,16 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
-
+static void setButton__clicked(GtkWidget *widget, gpointer user_data);
+static void resetButton__clicked(GtkWidget *widget, gpointer user_data);
+void bitSetButton__clicked(GtkButton *data, gpointer user_data);
+void bitClearButton__clicked(GtkButton *data, gpointer user_data);
+void bitToggleButton__clicked(GtkButton *data, gpointer user_data);
+void bitReadButton__clicked(GtkButton *data, gpointer user_data);
 
 G_DEFINE_TYPE (KalkulaatorWindow, kalkulaator_window, GTK_TYPE_APPLICATION_WINDOW);
 
+int count = 0;
 
 static void kalkulaator_window__nr_clicked(GtkButton *button, gpointer user_data)
 {
@@ -118,29 +124,9 @@ static void kalkulaator_window__add_clicked(GtkButton *button, gpointer user_dat
 
   // Append a plus sign to the expression
   gchar *add = "+";
-  g_print("xVal pointer: %p\n", window->xVal);
-  g_print("yVal pointer: %p\n", window->yVal);
-
-  GtkWidget *target_display = GTK_WIDGET(window->display); // By default, target display is display
-
-    // Check the state of xVal toggle button
-    gboolean xVal_active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->xVal));
-    // Check the state of yVal toggle button
-    gboolean yVal_active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->yVal));
-
-    if (xVal_active)
-    {
-      target_display = GTK_WIDGET(window->display2);
-    }
-    else if (yVal_active)
-    {
-      target_display = GTK_WIDGET(window->display3);
-    }
-
-
-   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(target_display));
+  const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
     gchar *updated_text = g_strconcat(current_text, add, NULL);
-    gtk_editable_set_text(GTK_EDITABLE(target_display), updated_text);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
     g_free(updated_text);
 }
 
@@ -250,16 +236,63 @@ static void show_history_dialog(GtkWidget *parent)
     g_free(buffer);
 
     // Set the size of the scrolled window
-    gtk_widget_set_size_request(scrolled_window, 400, 300); // Adjust the size as per your requirement
+    gtk_widget_set_size_request(scrolled_window, 400, 300);
 
     // Add the scrolled window to the dialog's content area
     GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
     gtk_box_append(GTK_BOX(content_area), scrolled_window);
 
+    GtkWidget *label = gtk_label_new("Set history to ... lines:");
+    gtk_box_append(GTK_BOX(content_area), label);
+
+    GtkWidget *count_entry = gtk_entry_new();
+    gtk_box_append(GTK_BOX(content_area), count_entry);
+
+
+    GtkButton *setButton = GTK_BUTTON(gtk_button_new_with_label("Set"));
+    gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(setButton));
+    g_signal_connect(setButton, "clicked", G_CALLBACK(setButton__clicked), count_entry);
+
+    GtkButton *resetButton = GTK_BUTTON(gtk_button_new_with_label("reset"));
+    gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(resetButton));
+    g_signal_connect(resetButton, "clicked", G_CALLBACK(resetButton__clicked), 0);
+
     // Show the dialog
     gtk_widget_show(dialog);
 }
 
+static void setButton__clicked(GtkWidget *widget, gpointer user_data)
+{
+  const gchar *num = gtk_editable_get_text(GTK_EDITABLE(user_data));
+
+  const char *filepath2 = "len.txt";
+  FILE *fInLen = fopen(filepath2, "w");
+    if (fInLen == NULL)
+    {
+      g_print("Error opening file for writing\n");
+      return;
+    }
+
+  fprintf(fInLen, "%s\n", num);
+  fclose(fInLen);
+
+}
+
+static void resetButton__clicked(GtkWidget *widget, gpointer user_data)
+{
+  const char *filepath = "History.txt";
+  FILE *fOut = fopen(filepath, "w");
+    if (fOut == NULL)
+    {
+      g_print("Error opening file for writing\n");
+      return;
+    }
+
+
+    // Close the file
+    fclose(fOut);
+
+}
 
 static void kalkulaator_window__history_clicked(GtkButton *button, gpointer user_data)
 {
@@ -359,12 +392,10 @@ static void kalkulaator_window__equal_clicked(GtkButton *button, gpointer user_d
       gchar *yVal = CalcMain((char*)y, (double) 0, (double) 0);
       double valY = atof(yVal);
 
-      type__file((gchar*)text);
-      type__file((gchar*)" = ");
+
       // Calculate the result
       gchar *result = CalcMain((char*)text, valX, valY);
-      type__file(result);
-      type__file((gchar*)"\n");
+      type__file((gchar*)text, "= ", result);
       //gtk_editable_set_text(GTK_EDITABLE(window->display2), text);
 
      //gtk_print_operation_set_export_filename( )
@@ -396,7 +427,7 @@ static void kalkulaator_window__log_clicked(GtkButton *button, gpointer user_dat
     g_free(updated_text);
 }
 
-void history_delete()
+void history__delete()
 {
   const char *filepath = "History.txt";
   FILE *fOut = fopen(filepath, "w");
@@ -550,8 +581,216 @@ static void kalkulaator_window__arctan_clicked(GtkButton *data, gpointer user_da
     g_free(updated_text);
 }
 
+static void kalkulaator_window__xVal_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+  if(strcmp(gtk_editable_get_text(GTK_EDITABLE(window->display)), "0") == 0)
+    {
+      gtk_editable_set_text(GTK_EDITABLE(window->display), "");
+    }
+  gchar *x = "x";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, x, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+}
+static void kalkulaator_window__yVal_clicked(GtkButton *data, gpointer user_data)
+{
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+  if(strcmp(gtk_editable_get_text(GTK_EDITABLE(window->display)), "0") == 0)
+    {
+      gtk_editable_set_text(GTK_EDITABLE(window->display), "");
+    }
+  gchar *y = "y";
+   const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
+    gchar *updated_text = g_strconcat(current_text, y, NULL);
+    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
+    g_free(updated_text);
+}
+
+typedef struct {
+    GtkWidget *text_entry;
+    GtkWidget *bit_entry;
+    GtkWidget *result_entry;
+} BitmaskData;
+
+static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_data)
+{
+
+  g_print("clikced");
+  GtkWidget *dialog = gtk_dialog_new();
+
+    gtk_window_set_title(GTK_WINDOW(dialog), "bitmask");
 
 
+
+    // Add the scrolled window to the dialog's content area
+    GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+
+    GtkWidget *bitLabel = gtk_label_new("Binary number:");
+    gtk_box_append(GTK_BOX(content_area), bitLabel);
+
+    GtkWidget *text_entry = gtk_entry_new();
+    gtk_box_append(GTK_BOX(content_area), text_entry);
+
+    GtkWidget *maskLabel = gtk_label_new("bit to mask");
+    gtk_box_append(GTK_BOX(content_area), maskLabel);
+
+    GtkWidget *bit_entry = gtk_entry_new();
+    gtk_box_append(GTK_BOX(content_area), bit_entry);
+
+    GtkButton *setButton = GTK_BUTTON(gtk_button_new_with_label("set"));
+    gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(setButton));
+
+
+    GtkButton *clearButton = GTK_BUTTON(gtk_button_new_with_label("clear"));
+    gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(clearButton));
+
+    GtkButton *readButton = GTK_BUTTON(gtk_button_new_with_label("read"));
+    gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(readButton));
+
+    GtkButton *toggleButton = GTK_BUTTON(gtk_button_new_with_label("toggle"));
+    gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(toggleButton));
+
+    GtkWidget *resultLabel = gtk_label_new("result:");
+    gtk_box_append(GTK_BOX(content_area), resultLabel);
+
+    GtkWidget *result_entry = gtk_entry_new();
+    gtk_box_append(GTK_BOX(content_area), result_entry);
+
+    BitmaskData *bitmask_data = g_new(BitmaskData, 1);
+    bitmask_data->text_entry = text_entry;
+    bitmask_data->bit_entry = bit_entry;
+    bitmask_data->result_entry = result_entry;
+
+    g_signal_connect(setButton, "clicked", G_CALLBACK(bitSetButton__clicked), bitmask_data);
+    g_signal_connect(clearButton, "clicked", G_CALLBACK(bitClearButton__clicked), bitmask_data);
+    g_signal_connect(readButton, "clicked", G_CALLBACK(bitReadButton__clicked), bitmask_data);
+    g_signal_connect(toggleButton, "clicked", G_CALLBACK(bitToggleButton__clicked), bitmask_data);
+
+    // Show the dialog
+    gtk_widget_show(dialog);
+}
+
+char *int_to_binary(int num, int n)
+{
+    char *binary_str = (char *)malloc((n + 1) * sizeof(char)); // Allocate memory for the string (n bits + null terminator)
+    if (binary_str == NULL)
+    {
+        return NULL;
+    }
+    binary_str[n] = '\0'; // Null terminate the string
+
+    for (int i = n - 1; i >= 0; i--) // Corrected loop condition
+    {
+        binary_str[i] = (num & 1) ? '1' : '0';
+        num >>= 1;
+    }
+
+    return binary_str;
+}
+
+
+void bitSetButton__clicked(GtkButton *data, gpointer user_data)
+{
+    BitmaskData *bitmask_data = (BitmaskData *)user_data;
+    GtkWidget *text_entry = bitmask_data->text_entry;
+    GtkWidget *bit_entry = bitmask_data->bit_entry;
+    GtkWidget *result_entry = bitmask_data->result_entry;
+
+    const gchar *binary_str = gtk_editable_get_text(GTK_EDITABLE(text_entry));
+    const gchar *bit_str = gtk_editable_get_text(GTK_EDITABLE(bit_entry));
+
+    int n = strlen(binary_str);
+    int binary = atoi(binary_str);
+    int bit = atoi(bit_str);
+    g_print("binary: %d and bit %d\n", binary, bit);
+
+    // Calculate the new binary number with the specified bit set to 1
+    int newBinary = binary | (1 << (bit - 1));
+
+    // Convert the new binary number to a binary string and display it
+    char *newBinary_str = int_to_binary(newBinary, n);
+    if (newBinary_str != NULL)
+      {
+        gtk_editable_set_text(GTK_EDITABLE(result_entry), newBinary_str);
+        free(newBinary_str); // Free the allocated memory
+    }
+
+}
+void bitClearButton__clicked(GtkButton *data, gpointer user_data)
+{
+  BitmaskData *bitmask_data = (BitmaskData *)user_data;
+  GtkWidget *text_entry = bitmask_data->text_entry;
+  GtkWidget *bit_entry = bitmask_data->bit_entry;
+  GtkWidget *result_entry = bitmask_data->result_entry;
+
+  const gchar *binary_str = gtk_editable_get_text(GTK_EDITABLE(text_entry));
+  const gchar *bit_str = gtk_editable_get_text(GTK_EDITABLE(bit_entry));
+
+  int n = strlen(binary_str);
+  int binary = atoi(binary_str);
+  int bit = atoi(bit_str);
+  g_print("binary: %d and bit %d\n", binary, bit);
+
+  int newBinary = binary &~ (1 << (bit - 1));
+
+  char *newBinary_str = int_to_binary(newBinary, n);
+    if (newBinary_str != NULL)
+      {
+        gtk_editable_set_text(GTK_EDITABLE(result_entry), newBinary_str);
+        free(newBinary_str); // Free the allocated memory
+    }
+}
+void bitReadButton__clicked(GtkButton *data, gpointer user_data)
+{
+  BitmaskData *bitmask_data = (BitmaskData *)user_data;
+  GtkWidget *text_entry = bitmask_data->text_entry;
+  GtkWidget *bit_entry = bitmask_data->bit_entry;
+  GtkWidget *result_entry = bitmask_data->result_entry;
+
+  const gchar *binary_str = gtk_editable_get_text(GTK_EDITABLE(text_entry));
+  const gchar *bit_str = gtk_editable_get_text(GTK_EDITABLE(bit_entry));
+
+  int n = strlen(binary_str);
+  int binary = atoi(binary_str);
+  int bit = atoi(bit_str);
+  g_print("binary: %d and bit %d\n", binary, bit);
+
+  int newBinary = binary & (1 << (bit - 1));
+
+  char *newBinary_str = int_to_binary(newBinary, n);
+    if (newBinary_str != NULL)
+      {
+        gtk_editable_set_text(GTK_EDITABLE(result_entry), newBinary_str);
+        free(newBinary_str); // Free the allocated memory
+    }
+}
+void bitToggleButton__clicked(GtkButton *data, gpointer user_data)
+{
+  BitmaskData *bitmask_data = (BitmaskData *)user_data;
+  GtkWidget *text_entry = bitmask_data->text_entry;
+  GtkWidget *bit_entry = bitmask_data->bit_entry;
+  GtkWidget *result_entry = bitmask_data->result_entry;
+
+  const gchar *binary_str = gtk_editable_get_text(GTK_EDITABLE(text_entry));
+  const gchar *bit_str = gtk_editable_get_text(GTK_EDITABLE(bit_entry));
+
+  int n = strlen(binary_str);
+  int binary = atoi(binary_str);
+  int bit = atoi(bit_str);
+  g_print("binary: %d and bit %d\n", binary, bit);
+
+  int newBinary = binary ^ (1 << (bit - 1));
+
+  char *newBinary_str = int_to_binary(newBinary, n);
+    if (newBinary_str != NULL)
+      {
+        gtk_editable_set_text(GTK_EDITABLE(result_entry), newBinary_str);
+        free(newBinary_str); // Free the allocated memory
+    }
+
+}
 static void kalkulaator_window_class_init (KalkulaatorWindowClass *klass)
 {
  // gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS(klass), "/org/example/App/kalkulaator-window.ui");
@@ -590,11 +829,14 @@ static void kalkulaator_window_class_init (KalkulaatorWindowClass *klass)
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__tan_clicked);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__arctan_clicked);
 
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__xVal_clicked);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__yVal_clicked);
+
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__buttonfact_clicked);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__xtrabutton3_clicked);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__xtrabutton4_clicked);
-
-  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__toggle_button_toggled);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__bitmask_clicked);
+  //gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__toggle_button_toggled);
 /*
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window_xtrabutton5_clicked);
    */
@@ -646,10 +888,13 @@ kalkulaator_window_init (KalkulaatorWindow *self)
   g_signal_connect(self->buttontan, "clicked", G_CALLBACK(kalkulaator_window__tan_clicked), self);
   g_signal_connect(self->buttonarctan, "clicked", G_CALLBACK(kalkulaator_window__arctan_clicked), self);
 
+  g_signal_connect(self->xVal, "clicked", G_CALLBACK(kalkulaator_window__xVal_clicked), self);
+  g_signal_connect(self->yVal, "clicked", G_CALLBACK(kalkulaator_window__yVal_clicked), self);
+
   g_signal_connect(self->buttonfact, "clicked", G_CALLBACK(kalkulaator_window__buttonfact_clicked), self);
   g_signal_connect(self->xtrabutton3, "clicked", G_CALLBACK(kalkulaator_window__xtrabutton3_clicked), self);
   g_signal_connect(self->xtrabutton4, "clicked", G_CALLBACK(kalkulaator_window__xtrabutton4_clicked), self);
-
+  g_signal_connect(self->bitmask, "clicked", G_CALLBACK(kalkulaator_window__bitmask_clicked), self);
 
   //g_signal_connect(self->xVal, "toggled", G_CALLBACK(kalkulaator_window__toggle_button_toggled), self);
   //g_signal_connect(self->yVal, "toggled", G_CALLBACK(kalkulaator_window__toggle_button_toggled), self);
@@ -665,5 +910,5 @@ kalkulaator_window_init (KalkulaatorWindow *self)
   gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton4), FALSE);
   gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton5), FALSE);
    */
-   history_delete();
+  // history__delete();
 }
