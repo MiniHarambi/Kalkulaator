@@ -879,36 +879,22 @@ static void masking__clicked(GtkButton *data, gpointer user_data)
     gtk_editable_set_text(GTK_EDITABLE(toggle_bin_entry), toggle);
     gtk_editable_set_text(GTK_EDITABLE(read_bin_entry), show);
 
-    int hex_len = (option+3)/4;
-    char * hexSet = malloc(hex_len + 1);
-    if (hexSet == NULL)
-    {
-      fprintf(stderr, "Memory allocation failed\n");
-      exit(EXIT_FAILURE);
-    }
-    char * hexClear = malloc(hex_len + 1);
-    if (hexClear == NULL)
-    {
-      fprintf(stderr, "Memory allocation failed\n");
-      exit(EXIT_FAILURE);
-    }
-    char * hexToggle = malloc(hex_len + 1);
-    if (hexToggle == NULL)
-    {
-      fprintf(stderr, "Memory allocation failed\n");
-      exit(EXIT_FAILURE);
-    }
-    char * hexRead = malloc(hex_len + 1);
-    if (hexRead == NULL)
-    {
-      fprintf(stderr, "Memory allocation failed\n");
-      exit(EXIT_FAILURE);
-    }
-    sprintf(hexSet, "%0X", hex_len, (unsigned int) strtol(set, NULL, 2));
-    sprintf(hexClear, "%0X", hex_len, (unsigned int) strtol(clear, NULL, 2));
-    sprintf(hexToggle, "%0X", hex_len, (unsigned int) strtol(toggle, NULL, 2));
-    sprintf(hexRead, "%0X", hex_len, (unsigned int) strtol(show, NULL, 2));
+    uint64_t binSet = strtoull(set, NULL, 2);
+    char hexSet[option];
+    sprintf(hexSet, "%lX\n", binSet);
+    
+    uint64_t binClear = strtoull(clear, NULL, 2);
+    char hexClear[option];
+    sprintf(hexClear, "%lX\n", binClear);
+    
+    uint64_t binToggle = strtoull(toggle, NULL, 2);
+    char hexToggle[option];
+    sprintf(hexToggle, "%lX\n", binToggle);
 
+    uint64_t binShow = strtoull(show, NULL, 2);
+    char hexShow[option];
+    sprintf(hexShow, "%lX\n", binShow);
+    
     gtk_editable_set_text(GTK_EDITABLE(set_num_entry), hexSet);
     gtk_editable_set_text(GTK_EDITABLE(clear_num_entry), hexClear);
     gtk_editable_set_text(GTK_EDITABLE(toggle_num_entry), hexToggle);
