@@ -19,19 +19,20 @@
 #include "kalkulaator-config.h"
 #include "kalkulaator-window.h"
 #include "kalkulaator-calc.h"
+#include "bitmask.h"
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
 static void setButton__clicked(GtkWidget *widget, gpointer user_data);
 static void resetButton__clicked(GtkWidget *widget, gpointer user_data);
-void bitSetButton__clicked(GtkButton *data, gpointer user_data);
-void bitClearButton__clicked(GtkButton *data, gpointer user_data);
-void bitToggleButton__clicked(GtkButton *data, gpointer user_data);
-void bitReadButton__clicked(GtkButton *data, gpointer user_data);
+static void masking__clicked(GtkButton *data, gpointer user_data);
+void on_bits_changed(GtkWidget *widget, gpointer data);
 
 G_DEFINE_TYPE (KalkulaatorWindow, kalkulaator_window, GTK_TYPE_APPLICATION_WINDOW);
 
 int count = 0;
+int option = 0;
+int bit = 0;
 
 static void kalkulaator_window__nr_clicked(GtkButton *button, gpointer user_data)
 {
@@ -253,7 +254,7 @@ static void show_history_dialog(GtkWidget *parent)
     gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(setButton));
     g_signal_connect(setButton, "clicked", G_CALLBACK(setButton__clicked), count_entry);
 
-    GtkButton *resetButton = GTK_BUTTON(gtk_button_new_with_label("reset"));
+    GtkButton *resetButton = GTK_BUTTON(gtk_button_new_with_label("reset history"));
     gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(resetButton));
     g_signal_connect(resetButton, "clicked", G_CALLBACK(resetButton__clicked), 0);
 
@@ -608,189 +609,316 @@ static void kalkulaator_window__yVal_clicked(GtkButton *data, gpointer user_data
     g_free(updated_text);
 }
 
-typedef struct {
-    GtkWidget *text_entry;
-    GtkWidget *bit_entry;
-    GtkWidget *result_entry;
-} BitmaskData;
+
+GtkWidget *bit_entry;
+GtkWidget *set_mask_entry;
+GtkWidget *clear_mask_entry;
+GtkWidget *toggle_mask_entry;
+GtkWidget *read_mask_entry;
+
+GtkWidget *set_bin_entry;
+GtkWidget *clear_bin_entry;
+GtkWidget *toggle_bin_entry;
+GtkWidget *read_bin_entry;
+
+GtkWidget *set_num_entry;
+GtkWidget *clear_num_entry;
+GtkWidget *toggle_num_entry;
+GtkWidget *read_num_entry;
 
 static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_data)
 {
+   g_print("clicked\n");
+    GtkWidget *window = gtk_window_new();
+    gtk_window_set_title(GTK_WINDOW(window), "Bitmask Calculator");
+    gtk_window_set_default_size(GTK_WINDOW(window), 750, 400);
+    g_signal_connect(window, "destroy", G_CALLBACK(gtk_window_close), NULL);
 
-  g_print("clikced");
-  GtkWidget *dialog = gtk_dialog_new();
+    // Create a grid layout
+    GtkWidget *grid = gtk_grid_new();
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 5);
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
+    gtk_widget_set_margin_top(grid, 10);
+    gtk_widget_set_margin_start(grid, 10);
+    gtk_widget_set_margin_end(grid, 10);
+    gtk_widget_set_margin_bottom(grid, 10);
+    gtk_window_set_child(GTK_WINDOW(window), grid);
 
-    gtk_window_set_title(GTK_WINDOW(dialog), "bitmask");
-
-
-
-    // Add the scrolled window to the dialog's content area
-    GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-
-    GtkWidget *bitLabel = gtk_label_new("Binary number:");
-    gtk_box_append(GTK_BOX(content_area), bitLabel);
-
-    GtkWidget *text_entry = gtk_entry_new();
-    gtk_box_append(GTK_BOX(content_area), text_entry);
-
-    GtkWidget *maskLabel = gtk_label_new("bit to mask");
-    gtk_box_append(GTK_BOX(content_area), maskLabel);
-
-    GtkWidget *bit_entry = gtk_entry_new();
-    gtk_box_append(GTK_BOX(content_area), bit_entry);
-
-    GtkButton *setButton = GTK_BUTTON(gtk_button_new_with_label("set"));
-    gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(setButton));
-
-
-    GtkButton *clearButton = GTK_BUTTON(gtk_button_new_with_label("clear"));
-    gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(clearButton));
-
-    GtkButton *readButton = GTK_BUTTON(gtk_button_new_with_label("read"));
-    gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(readButton));
-
-    GtkButton *toggleButton = GTK_BUTTON(gtk_button_new_with_label("toggle"));
-    gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(toggleButton));
-
-    GtkWidget *resultLabel = gtk_label_new("result:");
-    gtk_box_append(GTK_BOX(content_area), resultLabel);
-
-    GtkWidget *result_entry = gtk_entry_new();
-    gtk_box_append(GTK_BOX(content_area), result_entry);
-
-    BitmaskData *bitmask_data = g_new(BitmaskData, 1);
-    bitmask_data->text_entry = text_entry;
-    bitmask_data->bit_entry = bit_entry;
-    bitmask_data->result_entry = result_entry;
-
-    g_signal_connect(setButton, "clicked", G_CALLBACK(bitSetButton__clicked), bitmask_data);
-    g_signal_connect(clearButton, "clicked", G_CALLBACK(bitClearButton__clicked), bitmask_data);
-    g_signal_connect(readButton, "clicked", G_CALLBACK(bitReadButton__clicked), bitmask_data);
-    g_signal_connect(toggleButton, "clicked", G_CALLBACK(bitToggleButton__clicked), bitmask_data);
-
-    // Show the dialog
-    gtk_widget_show(dialog);
-}
-
-char *int_to_binary(int num, int n)
-{
-    char *binary_str = (char *)malloc((n + 1) * sizeof(char)); // Allocate memory for the string (n bits + null terminator)
-    if (binary_str == NULL)
+    //row 1
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("How many bits:"), 0, 0, 1, 1);
+    const char *options[6] = {"", "8", "16", "32", "64", NULL};
+    GtkWidget *bits_dropdown = gtk_combo_box_text_new();
+    for (int i = 0; options[i] != NULL; i++)
     {
-        return NULL;
+      gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(bits_dropdown), options[i]);
     }
-    binary_str[n] = '\0'; // Null terminate the string
+    gtk_widget_set_hexpand(bits_dropdown, TRUE);
+    gtk_widget_set_vexpand(bits_dropdown, TRUE);
+    gtk_grid_attach(GTK_GRID(grid), bits_dropdown, 1, 0, 1, 1);
 
-    for (int i = n - 1; i >= 0; i--) // Corrected loop condition
+    //row 2
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Bit to mask:"), 0, 1, 1, 1);
+    bit_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(bit_entry, TRUE);
+    gtk_widget_set_vexpand(bit_entry, TRUE);
+    gtk_grid_attach(GTK_GRID(grid), bit_entry, 1, 1, 1, 1);
+    g_signal_connect(bits_dropdown, "changed", G_CALLBACK(on_bits_changed), bit_entry);
+
+    //separators between masks
+    GtkWidget *empty_row1 = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
+    //gtk_widget_set_hexpand(empty_row1, TRUE);
+    //gtk_widget_set_vexpand(empty_row1, TRUE);
+    gtk_grid_attach(GTK_GRID(grid), empty_row1, 0, 2, 5, 1);
+
+
+    //row 4/1
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Mask to set:"), 0, 3, 1, 1);
+    set_mask_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(set_mask_entry, TRUE);
+    gtk_widget_set_vexpand(set_mask_entry, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(set_mask_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), set_mask_entry, 1, 3, 1, 1);
+
+    //row 5/1
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Use example:"), 0, 4, 1, 1);
+    GtkWidget *set_bin_label = gtk_label_new("                        num | 0b");
+    gtk_widget_set_hexpand(set_bin_label, TRUE);
+    gtk_widget_set_vexpand(set_bin_label, TRUE);
+    set_bin_entry = gtk_entry_new();
+    gtk_editable_set_editable(GTK_EDITABLE(set_bin_entry), FALSE);
+    gtk_widget_set_hexpand(set_bin_entry, TRUE);
+    gtk_widget_set_vexpand(set_bin_entry, TRUE);
+    gtk_grid_attach(GTK_GRID(grid), set_bin_label, 0, 5, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), set_bin_entry, 1, 5, 1, 1);
+
+    //row 6/1
+    GtkWidget *set_num_label = gtk_label_new("                        num | 0x");
+    gtk_widget_set_hexpand(set_num_label, TRUE);
+    gtk_widget_set_vexpand(set_num_label, TRUE);
+    set_num_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(set_num_entry, TRUE);
+    gtk_widget_set_vexpand(set_num_entry, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(set_num_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), set_num_label, 0, 6, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), set_num_entry, 1, 6, 1, 1);
+
+    //empty row 7
+    GtkWidget *empty_row2 = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
+    //gtk_widget_set_hexpand(empty_row2, TRUE);
+    //gtk_widget_set_vexpand(empty_row2, TRUE);
+    gtk_grid_attach(GTK_GRID(grid), empty_row2, 0, 7, 5, 1);
+
+    //row 8/1
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Mask to clear:"), 0, 8, 1, 1);
+    clear_mask_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(clear_mask_entry, TRUE);
+    gtk_widget_set_vexpand(clear_mask_entry, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(clear_mask_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), clear_mask_entry, 1, 8, 1, 1);
+
+    //row 9/1
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Use example:"), 0, 10, 1, 1);
+    GtkWidget *clear_bin_label = gtk_label_new("                        num &~ 0b");
+    gtk_widget_set_hexpand(clear_bin_label, TRUE);
+    gtk_widget_set_vexpand(clear_bin_label, TRUE);
+    clear_bin_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(clear_bin_entry, TRUE);
+    gtk_widget_set_vexpand(clear_bin_entry, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(clear_bin_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), clear_bin_label, 0, 11, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), clear_bin_entry, 1, 11, 1, 1);
+
+    //row 10/1
+    GtkWidget *clear_num_label = gtk_label_new("                        num &~ 0x");
+    gtk_widget_set_hexpand(clear_num_label, TRUE);
+    gtk_widget_set_vexpand(clear_num_label, TRUE);
+    clear_num_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(clear_num_entry, TRUE);
+    gtk_widget_set_vexpand(clear_num_entry, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(clear_num_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), clear_num_label, 0, 12, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), clear_num_entry, 1, 12, 1, 1);
+
+    //separator row between
+    GtkWidget *empty_row3 = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
+    //gtk_widget_set_hexpand(empty_row3, TRUE);
+    //gtk_widget_set_vexpand(empty_row3, TRUE);
+    gtk_grid_attach(GTK_GRID(grid), empty_row3, 2, 2, 1, 11);
+
+    //row 2/2
+    GtkButton *maskingButton = GTK_BUTTON(gtk_button_new_with_label("mask"));
+    gtk_grid_attach(GTK_GRID(grid), maskingButton, 3, 0, 2, 2);
+    g_signal_connect(maskingButton, "clicked", G_CALLBACK(masking__clicked), user_data);
+
+    //row 4/2
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Mask to toggle:"), 3, 3, 1, 1);
+    toggle_mask_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(toggle_mask_entry, TRUE);
+    gtk_widget_set_vexpand(toggle_mask_entry, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(toggle_mask_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), toggle_mask_entry, 4, 3, 1, 1);
+
+    //row 5/2
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Use example:"), 3, 4, 1, 1);
+    GtkWidget *toggle_bin_label = gtk_label_new("                        num ^ 0b");
+    gtk_widget_set_hexpand(toggle_bin_label, TRUE);
+    gtk_widget_set_vexpand(toggle_bin_label, TRUE);
+    toggle_bin_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(toggle_bin_entry, TRUE);
+    gtk_widget_set_vexpand(toggle_bin_entry, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(toggle_bin_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), toggle_bin_label, 3, 5, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), toggle_bin_entry, 4, 5, 1, 1);
+
+    //row 6/2
+    GtkWidget *toggle_num_label = gtk_label_new("                        num ^ 0x");
+    gtk_widget_set_hexpand(toggle_num_label, TRUE);
+    gtk_widget_set_vexpand(toggle_num_label, TRUE);
+    toggle_num_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(toggle_num_entry, TRUE);
+    gtk_widget_set_vexpand(toggle_num_entry, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(toggle_num_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), toggle_num_label, 3, 6, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), toggle_num_entry, 4, 6, 1, 1);
+
+    //row 8/2
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Mask to read:"), 3, 8, 1, 1);
+    read_mask_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(read_mask_entry, TRUE);
+    gtk_widget_set_vexpand(read_mask_entry, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(read_mask_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), read_mask_entry, 4, 8, 1, 1);
+
+    //row 9/2
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Use example:"), 3, 10, 1, 1);
+    GtkWidget *read_bin_label = gtk_label_new("                        num & 0b");
+    gtk_widget_set_hexpand(read_bin_label, TRUE);
+    gtk_widget_set_vexpand(read_bin_label, TRUE);
+    read_bin_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(read_bin_label, TRUE);
+    gtk_widget_set_vexpand(read_bin_label, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(read_bin_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), read_bin_label, 3, 11, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), read_bin_entry, 4, 11, 1, 1);
+
+    //row 10/2
+    GtkWidget *read_num_label = gtk_label_new("                        num & 0x");
+    gtk_widget_set_hexpand(read_num_label, TRUE);
+    gtk_widget_set_vexpand(read_num_label, TRUE);
+    read_num_entry = gtk_entry_new();
+    gtk_widget_set_hexpand(read_num_entry, TRUE);
+    gtk_widget_set_vexpand(read_num_entry, TRUE);
+    gtk_editable_set_editable(GTK_EDITABLE(read_num_entry), FALSE);
+    gtk_grid_attach(GTK_GRID(grid), read_num_label, 3, 12, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), read_num_entry, 4, 12, 1, 1);
+
+    gtk_widget_show(window);
+}
+
+void on_bits_changed(GtkWidget *widget, gpointer data) {
+    GtkComboBox *combo_box = GTK_COMBO_BOX(widget);
+    option = gtk_combo_box_get_active(combo_box);
+}
+
+static void masking__clicked(GtkButton *data, gpointer user_data)
+{
+    const gchar *bit_text= g_strdup(gtk_editable_get_text(GTK_EDITABLE(bit_entry)));
+    bit = atoi(bit_text);//atoi(bit_text);
+    if(option == 1)
     {
-        binary_str[i] = (num & 1) ? '1' : '0';
-        num >>= 1;
+      option = 8;
+    }
+    else if (option == 2)
+    {
+      option = 16;
+    }
+    else if(option == 3)
+    {
+      option = 32;
+    }
+    else if(option == 4)
+    {
+      option = 64;
     }
 
-    return binary_str;
+    nums *getMask = malloc(option * sizeof(nums));
+    if (getMask == NULL) {
+      fprintf(stderr, "Memory allocation failed\n");
+      exit(EXIT_FAILURE);
+    }
+
+    GetMask(option, bit, getMask);
+    char *set = malloc(option * 2 + 1);
+    char *clear = malloc(option * 2 + 1);
+    char *toggle = malloc(option * 2 + 1);
+    char *show = malloc(option * 2 + 1);
+
+    if (set == NULL || clear == NULL || toggle == NULL || show == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+
+    set[0] = '\0';
+    clear[0] = '\0';
+    toggle[0] = '\0';
+    show[0] = '\0';
+
+    for (int i = option - 1; i >= 0; i--) {
+        strcat(set, getMask[i].set);
+        strcat(clear, getMask[i].clear);
+        strcat(toggle, getMask[i].toggle);
+        strcat(show, getMask[i].show);
+    }
+    gtk_editable_set_text(GTK_EDITABLE(set_mask_entry), set);
+    gtk_editable_set_text(GTK_EDITABLE(clear_mask_entry), clear);
+    gtk_editable_set_text(GTK_EDITABLE(toggle_mask_entry), toggle);
+    gtk_editable_set_text(GTK_EDITABLE(read_mask_entry), show);
+
+    gtk_editable_set_text(GTK_EDITABLE(set_bin_entry), set);
+    gtk_editable_set_text(GTK_EDITABLE(clear_bin_entry), clear);
+    gtk_editable_set_text(GTK_EDITABLE(toggle_bin_entry), toggle);
+    gtk_editable_set_text(GTK_EDITABLE(read_bin_entry), show);
+
+    int hex_len = (option+3)/4;
+    char * hexSet = malloc(hex_len + 1);
+    if (hexSet == NULL)
+    {
+      fprintf(stderr, "Memory allocation failed\n");
+      exit(EXIT_FAILURE);
+    }
+    char * hexClear = malloc(hex_len + 1);
+    if (hexClear == NULL)
+    {
+      fprintf(stderr, "Memory allocation failed\n");
+      exit(EXIT_FAILURE);
+    }
+    char * hexToggle = malloc(hex_len + 1);
+    if (hexToggle == NULL)
+    {
+      fprintf(stderr, "Memory allocation failed\n");
+      exit(EXIT_FAILURE);
+    }
+    char * hexRead = malloc(hex_len + 1);
+    if (hexRead == NULL)
+    {
+      fprintf(stderr, "Memory allocation failed\n");
+      exit(EXIT_FAILURE);
+    }
+    sprintf(hexSet, "%0X", hex_len, (unsigned int) strtol(set, NULL, 2));
+    sprintf(hexClear, "%0X", hex_len, (unsigned int) strtol(clear, NULL, 2));
+    sprintf(hexToggle, "%0X", hex_len, (unsigned int) strtol(toggle, NULL, 2));
+    sprintf(hexRead, "%0X", hex_len, (unsigned int) strtol(show, NULL, 2));
+
+    gtk_editable_set_text(GTK_EDITABLE(set_num_entry), hexSet);
+    gtk_editable_set_text(GTK_EDITABLE(clear_num_entry), hexClear);
+    gtk_editable_set_text(GTK_EDITABLE(toggle_num_entry), hexToggle);
+    gtk_editable_set_text(GTK_EDITABLE(read_num_entry), hexRead);
+
+    free(set);
+    free(getMask);
 }
 
 
-void bitSetButton__clicked(GtkButton *data, gpointer user_data)
-{
-    BitmaskData *bitmask_data = (BitmaskData *)user_data;
-    GtkWidget *text_entry = bitmask_data->text_entry;
-    GtkWidget *bit_entry = bitmask_data->bit_entry;
-    GtkWidget *result_entry = bitmask_data->result_entry;
-
-    const gchar *binary_str = gtk_editable_get_text(GTK_EDITABLE(text_entry));
-    const gchar *bit_str = gtk_editable_get_text(GTK_EDITABLE(bit_entry));
-
-    int n = strlen(binary_str);
-    int binary = atoi(binary_str);
-    int bit = atoi(bit_str);
-    g_print("binary: %d and bit %d\n", binary, bit);
-
-    // Calculate the new binary number with the specified bit set to 1
-    int newBinary = binary | (1 << (bit - 1));
-
-    // Convert the new binary number to a binary string and display it
-    char *newBinary_str = int_to_binary(newBinary, n);
-    if (newBinary_str != NULL)
-      {
-        gtk_editable_set_text(GTK_EDITABLE(result_entry), newBinary_str);
-        free(newBinary_str); // Free the allocated memory
-    }
-
-}
-void bitClearButton__clicked(GtkButton *data, gpointer user_data)
-{
-  BitmaskData *bitmask_data = (BitmaskData *)user_data;
-  GtkWidget *text_entry = bitmask_data->text_entry;
-  GtkWidget *bit_entry = bitmask_data->bit_entry;
-  GtkWidget *result_entry = bitmask_data->result_entry;
-
-  const gchar *binary_str = gtk_editable_get_text(GTK_EDITABLE(text_entry));
-  const gchar *bit_str = gtk_editable_get_text(GTK_EDITABLE(bit_entry));
-
-  int n = strlen(binary_str);
-  int binary = atoi(binary_str);
-  int bit = atoi(bit_str);
-  g_print("binary: %d and bit %d\n", binary, bit);
-
-  int newBinary = binary &~ (1 << (bit - 1));
-
-  char *newBinary_str = int_to_binary(newBinary, n);
-    if (newBinary_str != NULL)
-      {
-        gtk_editable_set_text(GTK_EDITABLE(result_entry), newBinary_str);
-        free(newBinary_str); // Free the allocated memory
-    }
-}
-void bitReadButton__clicked(GtkButton *data, gpointer user_data)
-{
-  BitmaskData *bitmask_data = (BitmaskData *)user_data;
-  GtkWidget *text_entry = bitmask_data->text_entry;
-  GtkWidget *bit_entry = bitmask_data->bit_entry;
-  GtkWidget *result_entry = bitmask_data->result_entry;
-
-  const gchar *binary_str = gtk_editable_get_text(GTK_EDITABLE(text_entry));
-  const gchar *bit_str = gtk_editable_get_text(GTK_EDITABLE(bit_entry));
-
-  int n = strlen(binary_str);
-  int binary = atoi(binary_str);
-  int bit = atoi(bit_str);
-  g_print("binary: %d and bit %d\n", binary, bit);
-
-  int newBinary = binary & (1 << (bit - 1));
-
-  char *newBinary_str = int_to_binary(newBinary, n);
-    if (newBinary_str != NULL)
-      {
-        gtk_editable_set_text(GTK_EDITABLE(result_entry), newBinary_str);
-        free(newBinary_str); // Free the allocated memory
-    }
-}
-void bitToggleButton__clicked(GtkButton *data, gpointer user_data)
-{
-  BitmaskData *bitmask_data = (BitmaskData *)user_data;
-  GtkWidget *text_entry = bitmask_data->text_entry;
-  GtkWidget *bit_entry = bitmask_data->bit_entry;
-  GtkWidget *result_entry = bitmask_data->result_entry;
-
-  const gchar *binary_str = gtk_editable_get_text(GTK_EDITABLE(text_entry));
-  const gchar *bit_str = gtk_editable_get_text(GTK_EDITABLE(bit_entry));
-
-  int n = strlen(binary_str);
-  int binary = atoi(binary_str);
-  int bit = atoi(bit_str);
-  g_print("binary: %d and bit %d\n", binary, bit);
-
-  int newBinary = binary ^ (1 << (bit - 1));
-
-  char *newBinary_str = int_to_binary(newBinary, n);
-    if (newBinary_str != NULL)
-      {
-        gtk_editable_set_text(GTK_EDITABLE(result_entry), newBinary_str);
-        free(newBinary_str); // Free the allocated memory
-    }
-
-}
 static void kalkulaator_window_class_init (KalkulaatorWindowClass *klass)
 {
  // gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS(klass), "/org/example/App/kalkulaator-window.ui");
@@ -895,6 +1023,9 @@ kalkulaator_window_init (KalkulaatorWindow *self)
   g_signal_connect(self->xtrabutton3, "clicked", G_CALLBACK(kalkulaator_window__xtrabutton3_clicked), self);
   g_signal_connect(self->xtrabutton4, "clicked", G_CALLBACK(kalkulaator_window__xtrabutton4_clicked), self);
   g_signal_connect(self->bitmask, "clicked", G_CALLBACK(kalkulaator_window__bitmask_clicked), self);
+
+  gtk_editable_set_text (GTK_EDITABLE(self->display2), "0");
+  gtk_editable_set_text (GTK_EDITABLE(self->display3), "0");
 
   //g_signal_connect(self->xVal, "toggled", G_CALLBACK(kalkulaator_window__toggle_button_toggled), self);
   //g_signal_connect(self->yVal, "toggled", G_CALLBACK(kalkulaator_window__toggle_button_toggled), self);
