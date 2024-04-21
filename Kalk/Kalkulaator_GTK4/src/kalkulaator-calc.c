@@ -8,8 +8,10 @@
 
 int error = 0;
 
-void type__file(const gchar *content)
+void type__file(const gchar *content, char *text, char *result)
 {
+    int count = 0;
+    char chz;
     const char *filepath = "History.txt";
     FILE *fOut = fopen(filepath, "at+");
     if (fOut == NULL)
@@ -17,17 +19,39 @@ void type__file(const gchar *content)
       g_print("Error opening file for writing\n");
       return;
     }
+    const char *filepath2 = "len.txt";
+    FILE *fInLen = fopen(filepath2, "r");
+    if (fInLen == NULL)
+    {
+      g_print("Error opening file for writing\n");
+      return;
+    }
+    char num[5];
+    fscanf(fInLen, "%s", num);
+    int n = atoi(num);
+    while ((chz = fgetc(fOut)) != EOF)
+    {
+      if (chz == '\n')
+        {
+         count++;
+        }
+    }
+
+    g_print("%d", count+1);
 
     // Write content to the file
-    fprintf(fOut, "%s", content);
+    if(count < n)
+    {
+      fprintf(fOut, "%d. %s %s %s\n",count+1, content, text, result);
+    }
 
     // Close the file
+    fclose(fInLen);
     fclose(fOut);
 
     g_print("Content written to file.\n");
 }
 
-// Function implementations
 void initialize(Stack *s) {
     s->top = -1;
 }
@@ -38,14 +62,14 @@ int isEmpty(Stack *s) {
 
 void push(Stack *s, double value) {
     if (s->top == MAX_SIZE - 1) {
-        printf("Stack Overflow\n");
+        error = 14;
     }
     s->items[++(s->top)] = value;
 }
 
 double pop(Stack *s) {
     if (isEmpty(s)) {
-        printf("Stack Underflow\n");
+        error = 13;
     }
     return s->items[(s->top)--];
 }
@@ -60,9 +84,6 @@ int precedence(char op) {
             return 2;
         case '^':
             return 3;
-        case 'l':
-        case 's':
-            return 4;
         default:
             return 0;
     }
@@ -94,6 +115,7 @@ double applyOperator(double op1, double op2, char operatorr) {
 }
 
 double evaluateExpression(char *expr, int start, int end, double x, double y) {
+
     Stack operator_stack;
     Stack operand_stack;
     initialize(&operator_stack);
@@ -103,6 +125,7 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
             expr[i] = '.';
         }
     }
+
     int i = start;
     while (i < end) {
         if (expr[i] == ' ') {
@@ -111,9 +134,9 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
         }
         if (isdigit(expr[i]) || expr[i] == '.') {
             char* endptr;
-            double operand = strtod(&expr[i], &endptr); // Convert string to double
+            double operand = strtod(&expr[i], &endptr);
             push(&operand_stack, operand);
-            i = endptr - expr - 1; // Move i to the end of the parsed number
+            i = endptr - expr - 1;
         }
         else if (expr[i] == 'x')
         {
@@ -129,11 +152,35 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
             int j = i + 1;
             int count = 1; // Parentheses count
             while (count != 0) {
-                if (expr[j] == '(') count++;
-                else if (expr[j] == ')') count--;
+                if (expr[j] == '('){
+                  count++;
+                }
+                else if (expr[j] == ')'){
+                  count--;
+                }
+                else if (j == (end))
+                {
+                  expr[j] = ')';
+                  error = 11;
+                  count--;
+                }
                 j++;
             }
             double result = evaluateExpression(expr, i + 1, j - 1, x, y);
+            if (isdigit(expr[i-1]))
+            {
+              double op = pop(&operand_stack);
+              result = result * op;
+            }
+            else if (isdigit(expr[j]))
+            {
+              double op = 0;
+              while (isdigit(expr[j])) {
+                op = op * 10 + (expr[j] - '0');
+                j++;
+              }
+              result = result * op;
+            }
             push(&operand_stack, result);
             i = j - 1; // Adjust i for next loop increment
         }
@@ -157,16 +204,32 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
           printf("%d", k);
             int count = 1; // Parentheses count
             while (count != 0) {
-                if (expr[k] == '(')
-                count++;
+                if (expr[k] == '('){
+                  count++;
+                }
                 else if (expr[k] == ')')
                 {
-                   count--;
+                  count--;
+                }
+                else if (k == (end))
+                {
+                  expr[k] = ')';
+                  error = 11;
+                  count--;
                 }
                 k++;
             }
             double operand = evaluateExpression(expr, j + 1, k - 1, x, y);
             double result = applyCustomLog(operand, base);
+            if (isdigit(expr[k]))
+            {
+              double op = 0;
+              while (isdigit(expr[k])) {
+                op = op * 10 + (expr[k] - '0');
+                k++;
+              }
+              result = result * op;
+            }
             push(&operand_stack, result);
             i = k; // Move i past the processed logarithm expression
         }
@@ -196,6 +259,12 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
                 {
                   count--;
                 }
+                else if (k == (end))
+                {
+                  expr[k] = ')';
+                  error = 11;
+                  count--;
+                }
                 k++;
             }
             double arg = evaluateExpression(expr, j + 1, k - 1, x, y);
@@ -208,6 +277,15 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
                 result = log10(arg);
             } else if (expr[i] == 's' && expr[i+1] == 'q' && expr[i+2] == 'r' && expr[i+3] == 't') {
                 result = sqrt(arg);
+            }
+            if (isdigit(expr[k]))
+            {
+              double op = 0;
+              while (isdigit(expr[k])) {
+                op = op * 10 + (expr[k] - '0');
+                k++;
+              }
+              result = result * op;
             }
             push(&operand_stack, result);
             i = k - 1; // Adjust i for next loop increment
@@ -248,6 +326,12 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
                 {
                   count--;
                 }
+                else if (k == (end))
+                {
+                  expr[k] = ')';
+                  error = 11;
+                  count--;
+                }
                 k++;
             }
             double arg = evaluateExpression(expr, j + 1, k - 1, x, y);
@@ -284,6 +368,15 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
             {
               result = sin((arg*M_PI)/180);
             }
+            if (isdigit(expr[k]))
+            {
+              double op = 0;
+              while (isdigit(expr[k])) {
+                op = op * 10 + (expr[k] - '0');
+                k++;
+              }
+              result = result * op;
+            }
             push(&operand_stack, result);
             i = k - 1;
 
@@ -302,12 +395,14 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
               int k = j - 1;
               while (expr[j] != '(') j--;
               double op = evaluateExpression(expr, j, k - 1, x, y);
+              if (op == 0)error = 12;
               push(&operand_stack, factorialOfNum((int)op));
           }
           else
           {
              double op = pop(&operand_stack);
-             push(&operand_stack, factorialOfNum((int)op));
+             if (op == 0)error = 12;
+            push(&operand_stack, factorialOfNum((int)op));
           }
         }
         else if((expr[i] != 'l' && expr[i+1] != 'o' && expr[i+2] != 'g') ||
@@ -329,7 +424,6 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
 
         i++;
     }
-
     while (!isEmpty(&operator_stack)) {
         char operator = pop(&operator_stack);
         double op2 = pop(&operand_stack);
@@ -385,13 +479,21 @@ gchar *ErrorMessage(int error)
     return g_strdup_printf ("%s", "Invalid expression: unable to find opening parenthesis for arcsin, arccos or arctan!");
   else if (error == 10)
     return g_strdup_printf ("%s", "Can't take logarithm or square root from a number smaller than 0");
+  else if (error == 11)
+    return g_strdup_printf ("%s", "Invalid expression: unable to find closing paranthesis");
+  else if (error == 12)
+    return g_strdup_printf ("%s", "Can't take fractions from 0 or negative numbers");
+  else if (error == 13)
+    return g_strdup_printf ("%s", "Too many operators");
+  else if (error == 14)
+    return g_strdup_printf ("%s", "Too few operators");
   else
     return g_strdup_printf ("%s", "Unknown error");
 }
 
 gchar *CalcMain(char *expr, double x, double y) {
-    error = 0;
     gchar *result_string;
+    error = 0;
     double calculated_result = evaluateInfix(expr, x, y);
     if (error != 0) {
         result_string = ErrorMessage(error);
