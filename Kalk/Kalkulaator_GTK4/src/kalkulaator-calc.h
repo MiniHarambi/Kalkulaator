@@ -44,7 +44,7 @@ double applyOperator(double op1, double op2, char operatorr);
 double evaluateExpression(char *expr, int start, int end, double x, double y);
 double evaluateInfix(char *expr, double x, double y);
 gchar *CalcMain(char *expr, double x, double y);
-void type__file(const gchar *content);
+void type__file(const gchar *content, char *text, char *result);
 double applyCustomLog(double operand, double base);
 double factorialOfNum(int n);
 gchar *ErrorMessage(int error);
