@@ -681,7 +681,7 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
 
     //row 5/1
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Use example:"), 0, 4, 1, 1);
-    GtkWidget *set_bin_label = gtk_label_new("                        num | 0b");
+    GtkWidget *set_bin_label = gtk_label_new("                        value | 0b");
     gtk_widget_set_hexpand(set_bin_label, TRUE);
     gtk_widget_set_vexpand(set_bin_label, TRUE);
     set_bin_entry = gtk_entry_new();
@@ -692,7 +692,7 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
     gtk_grid_attach(GTK_GRID(grid), set_bin_entry, 1, 5, 1, 1);
 
     //row 6/1
-    GtkWidget *set_num_label = gtk_label_new("                        num | 0x");
+    GtkWidget *set_num_label = gtk_label_new("                        value | 0x");
     gtk_widget_set_hexpand(set_num_label, TRUE);
     gtk_widget_set_vexpand(set_num_label, TRUE);
     set_num_entry = gtk_entry_new();
@@ -718,7 +718,7 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
 
     //row 9/1
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Use example:"), 0, 10, 1, 1);
-    GtkWidget *clear_bin_label = gtk_label_new("                        num &~ 0b");
+    GtkWidget *clear_bin_label = gtk_label_new("                        value &~ 0b");
     gtk_widget_set_hexpand(clear_bin_label, TRUE);
     gtk_widget_set_vexpand(clear_bin_label, TRUE);
     clear_bin_entry = gtk_entry_new();
@@ -729,7 +729,7 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
     gtk_grid_attach(GTK_GRID(grid), clear_bin_entry, 1, 11, 1, 1);
 
     //row 10/1
-    GtkWidget *clear_num_label = gtk_label_new("                        num &~ 0x");
+    GtkWidget *clear_num_label = gtk_label_new("                        value &~ 0x");
     gtk_widget_set_hexpand(clear_num_label, TRUE);
     gtk_widget_set_vexpand(clear_num_label, TRUE);
     clear_num_entry = gtk_entry_new();
@@ -746,7 +746,7 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
     gtk_grid_attach(GTK_GRID(grid), empty_row3, 2, 2, 1, 11);
 
     //row 2/2
-    GtkButton *maskingButton = GTK_BUTTON(gtk_button_new_with_label("mask"));
+    GtkButton *maskingButton = GTK_BUTTON(gtk_button_new_with_label("Generate masks"));
     gtk_grid_attach(GTK_GRID(grid), maskingButton, 3, 0, 2, 2);
     g_signal_connect(maskingButton, "clicked", G_CALLBACK(masking__clicked), user_data);
 
@@ -760,7 +760,7 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
 
     //row 5/2
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Use example:"), 3, 4, 1, 1);
-    GtkWidget *toggle_bin_label = gtk_label_new("                        num ^ 0b");
+    GtkWidget *toggle_bin_label = gtk_label_new("                        value ^ 0b");
     gtk_widget_set_hexpand(toggle_bin_label, TRUE);
     gtk_widget_set_vexpand(toggle_bin_label, TRUE);
     toggle_bin_entry = gtk_entry_new();
@@ -771,7 +771,7 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
     gtk_grid_attach(GTK_GRID(grid), toggle_bin_entry, 4, 5, 1, 1);
 
     //row 6/2
-    GtkWidget *toggle_num_label = gtk_label_new("                        num ^ 0x");
+    GtkWidget *toggle_num_label = gtk_label_new("                        value ^ 0x");
     gtk_widget_set_hexpand(toggle_num_label, TRUE);
     gtk_widget_set_vexpand(toggle_num_label, TRUE);
     toggle_num_entry = gtk_entry_new();
@@ -791,7 +791,7 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
 
     //row 9/2
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Use example:"), 3, 10, 1, 1);
-    GtkWidget *read_bin_label = gtk_label_new("                        num & 0b");
+    GtkWidget *read_bin_label = gtk_label_new("                        value & 0b");
     gtk_widget_set_hexpand(read_bin_label, TRUE);
     gtk_widget_set_vexpand(read_bin_label, TRUE);
     read_bin_entry = gtk_entry_new();
@@ -802,7 +802,7 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
     gtk_grid_attach(GTK_GRID(grid), read_bin_entry, 4, 11, 1, 1);
 
     //row 10/2
-    GtkWidget *read_num_label = gtk_label_new("                        num & 0x");
+    GtkWidget *read_num_label = gtk_label_new("                        value & 0x");
     gtk_widget_set_hexpand(read_num_label, TRUE);
     gtk_widget_set_vexpand(read_num_label, TRUE);
     read_num_entry = gtk_entry_new();
