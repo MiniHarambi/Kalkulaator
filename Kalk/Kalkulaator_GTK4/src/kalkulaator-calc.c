@@ -121,8 +121,8 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
     initialize(&operator_stack);
     initialize(&operand_stack);
     for (int i = start; i < end; i++) {
-        if (expr[i] == ',') {
-            expr[i] = '.';
+        if (expr[i] == '.') {
+            expr[i] = ',';
         }
     }
 
