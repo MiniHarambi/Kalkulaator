@@ -6,8 +6,8 @@ kalkulaator_sources = [
   'kalkulaator-application.h',
   'kalkulaator-window.h',
   'kalkulaator-calc.h',
-  'programming-window.c',
-  'programming-window.h',
+  'bitmask.c',
+  'bitmask.h',
 ]
 
 kalkulaator_deps = [
@@ -24,5 +24,5 @@ kalkulaator_sources += gnome.compile_resources('kalkulaator-resources',
 executable('kalkulaator', kalkulaator_sources,
   dependencies: kalkulaator_deps,
   install: true,
-  link_args: ['-lgtk-4', '-lm'],
+  link_args: ['-lm', '-lglib-2.0', '-lgtk-4'],
 )
