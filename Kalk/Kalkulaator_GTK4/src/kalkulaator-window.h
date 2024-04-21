@@ -74,11 +74,12 @@ struct _KalkulaatorWindow
   GtkButton           *xtrabutton3;
   GtkButton           *xtrabutton4;
   GtkButton           *buttonfact;
+  GtkButton           *xVal;
+  GtkButton           *yVal;
+  GtkButton           *setButton;
   GtkButton           *bitmask;
 
   GtkToggleButton     *togglebutton;
-  GtkToggleButton     *xVal;
-  GtkToggleButton     *yVal;
 /*
   GtkButton           *xtrabutton5;
    */
@@ -86,6 +87,7 @@ struct _KalkulaatorWindow
   gchar               *expression;
   gchar               *last_result;
   };
+
 
 G_DECLARE_FINAL_TYPE (KalkulaatorWindow, kalkulaator_window, KALKULAATOR, WINDOW, GtkApplicationWindow)
 
