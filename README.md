@@ -1,5 +1,5 @@
 # Kalkulaator
-Dependencies:
+Dependencies:    
 meson   
 GTK4   
 
