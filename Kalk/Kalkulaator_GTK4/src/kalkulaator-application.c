@@ -107,78 +107,6 @@ kalkulaator_application_show_about (GSimpleAction *action,
                          NULL);
 }
 
-static void
-kalkulaator_application_programming (GSimpleAction *action,
-                                     GVariant      *parameter,
-                                     gpointer       user_data)
-{
-
-  KalkulaatorApplication *self = KALKULAATOR_APPLICATION(user_data);
-  GtkBuilder *builder;
-  GtkWidget *window;
-   char cwd[1024];
-    if (getcwd(cwd, sizeof(cwd)) != NULL) {
-        printf("Current working directory: %s\n", cwd);
-    } else {
-        perror("getcwd() error");
-        return;
-    }
-  g_return_if_fail (KALKULAATOR_IS_APPLICATION (self));
-
-  // Load the new XML file
-  builder = gtk_builder_new_from_resource("/org/github/kalkulaator/programming-window.ui");
-  // Get the main window from the XML file
-  window = GTK_WIDGET(gtk_builder_get_object (builder, "main_window"));
-
-  // Set the application reference
-  g_object_set_data_full(G_OBJECT(window), "application", g_object_ref(self), g_object_unref);
-
-  // Present the window
-  gtk_window_present (GTK_WINDOW(window));
-
-  // Free the builder, the window is now responsible for its widgets
-  g_object_unref (builder);
-
-
-}
-
-static void
-kalkulaator_application_scientific (GSimpleAction *action,
-                                    GVariant      *parameter,
-                                    gpointer       user_data)
-{
-  KalkulaatorApplication *self = KALKULAATOR_APPLICATION(user_data);
-  GtkWindow *window = NULL;
-
-  g_return_if_fail (KALKULAATOR_IS_APPLICATION (self));
-
-  window = g_object_new (KALKULAATOR_TYPE_WINDOW,
-                         "application", self,
-                         "title", "Scientific Window",
-                         "default-width", 610,
-                         "default-height", 460,
-                         NULL);
-
-  gtk_window_present (window);
-}
-
-
-static void
-kalkulaator_application_converter (GSimpleAction *action,
-                                   GVariant      *parameter,
-                                   gpointer       user_data)
-{
-  KalkulaatorApplication *self = KALKULAATOR_APPLICATION(user_data);
-  GtkWindow *window = NULL;
-
-  g_return_if_fail (KALKULAATOR_IS_APPLICATION (self));
-
-  window = gtk_application_get_active_window (GTK_APPLICATION(self));
-
-  gtk_window_set_title(window, "Converter Window");
-  gtk_window_set_default_size(window, 610, 460);
-}
-
 
 
 static void
@@ -191,21 +119,6 @@ kalkulaator_application_init (KalkulaatorApplication *self)
   g_autoptr (GSimpleAction) about_action = g_simple_action_new ("about", NULL);
   g_signal_connect (about_action, "activate", G_CALLBACK (kalkulaator_application_show_about), self);
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (about_action));
-
-
-  g_autoptr (GSimpleAction) programming_action = g_simple_action_new ("programming", NULL);
-  g_signal_connect (programming_action, "activate", G_CALLBACK (kalkulaator_application_programming), self);
-  g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (programming_action));
-
-  g_autoptr (GSimpleAction) scientific_action = g_simple_action_new ("scientific", NULL);
-  g_signal_connect (scientific_action, "activate", G_CALLBACK (kalkulaator_application_scientific), self);
-  g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (scientific_action));
-
-  g_autoptr (GSimpleAction) converter_action = g_simple_action_new ("converter", NULL);
-  g_signal_connect (converter_action, "activate", G_CALLBACK (kalkulaator_application_converter), self);
-  g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (converter_action));
-
-
 
   gtk_application_set_accels_for_action (GTK_APPLICATION (self),
                                          "app.quit",
