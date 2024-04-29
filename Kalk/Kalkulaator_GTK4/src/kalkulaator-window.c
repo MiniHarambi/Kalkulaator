@@ -230,7 +230,7 @@ static void show_history_dialog(GtkWidget *parent)
     fread(buffer, 1, file_size, file);
     buffer[file_size] = '\0';
     fclose(file);
-
+    
     // Load content into the text view
     GtkTextBuffer *text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
     gtk_text_buffer_set_text(text_buffer, buffer, -1);
