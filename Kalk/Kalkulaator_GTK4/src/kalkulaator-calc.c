@@ -17,7 +17,6 @@ void type__file(const gchar *content, char *text, char *result)
     if (fOut == NULL)
     {
       g_print("Error opening file for writing\n");
-      fclose(fOut);
       return;
     }
     const char *filepath2 = "len.txt";
@@ -26,7 +25,6 @@ void type__file(const gchar *content, char *text, char *result)
     {
       g_print("Error opening file for writing\n");
       fclose(fOut);
-      fclose(fInLen);
       return;
     }
     char num[5];
