@@ -898,7 +898,7 @@ static void masking__clicked(GtkButton *data, gpointer user_data)
     gtk_editable_set_text(GTK_EDITABLE(set_num_entry), hexSet);
     gtk_editable_set_text(GTK_EDITABLE(clear_num_entry), hexClear);
     gtk_editable_set_text(GTK_EDITABLE(toggle_num_entry), hexToggle);
-    gtk_editable_set_text(GTK_EDITABLE(read_num_entry), hexRead);
+    gtk_editable_set_text(GTK_EDITABLE(read_num_entry), hexShow);
 
     free(set);
     free(clear);
