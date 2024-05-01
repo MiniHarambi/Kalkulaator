@@ -881,19 +881,19 @@ static void masking__clicked(GtkButton *data, gpointer user_data)
 
     uint64_t binSet = strtoull(set, NULL, 2);
     char hexSet[option];
-    sprintf(hexSet, "%lX\n", binSet);
+    sprintf(hexSet, "%lX", binSet);
     
     uint64_t binClear = strtoull(clear, NULL, 2);
     char hexClear[option];
-    sprintf(hexClear, "%lX\n", binClear);
+    sprintf(hexClear, "%lX", binClear);
     
     uint64_t binToggle = strtoull(toggle, NULL, 2);
     char hexToggle[option];
-    sprintf(hexToggle, "%lX\n", binToggle);
+    sprintf(hexToggle, "%lX", binToggle);
 
     uint64_t binShow = strtoull(show, NULL, 2);
     char hexShow[option];
-    sprintf(hexShow, "%lX\n", binShow);
+    sprintf(hexShow, "%lX", binShow);
     
     gtk_editable_set_text(GTK_EDITABLE(set_num_entry), hexSet);
     gtk_editable_set_text(GTK_EDITABLE(clear_num_entry), hexClear);
