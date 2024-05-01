@@ -39,15 +39,7 @@ static void kalkulaator_window__nr_clicked(GtkButton *button, gpointer user_data
 
     KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
     const gchar* text = gtk_button_get_label(button);
-    /*
-    gint position = gtk_editable_get_position(GTK_EDITABLE(window->display));
-    const gchar *current_text = gtk_editable_get_text(GTK_EDITABLE(window->display));
-    gchar *updated_text = g_strdup_printf("%s%c%s", g_strndup(current_text, position), *text, current_text + position);
-    gtk_editable_set_text(GTK_EDITABLE(window->display), updated_text);
-    g_free(updated_text);
-
-    gtk_editable_set_position(GTK_EDITABLE(window->display), position + 1);
-     */
+  
     if(strcmp(gtk_editable_get_text(GTK_EDITABLE(window->display)), "0") == 0)
     {
       gtk_editable_set_text(GTK_EDITABLE(window->display), "");
@@ -58,15 +50,7 @@ static void kalkulaator_window__nr_clicked(GtkButton *button, gpointer user_data
     g_free(updated_text);
 
 
-    /*
-    gchar *updated_expression = g_strdup_printf("%s%s", window->expression, text);
-    g_free(window->expression);
-    window->expression = updated_expression;
-
-    if (window->expression != NULL) {
-        gtk_editable_set_text(GTK_EDITABLE(window->display), window->expression);
-    }
-     */
+ 
 
 }
 
