@@ -201,11 +201,20 @@ static void show_history_dialog(GtkWidget *parent)
 {
     // Create a new dialog window
     GtkWidget *dialog = gtk_dialog_new();
+    gtk_widget_set_margin_start(dialog, 10); 
+    gtk_widget_set_margin_end(dialog, 10); 
+    gtk_widget_set_margin_top(dialog, 10); 
+    gtk_widget_set_margin_bottom(dialog, 10); 
 
     gtk_window_set_title(GTK_WINDOW(dialog), "History");
 
     // Create a text view to display the history content
     GtkWidget *text_view = gtk_text_view_new();
+    
+    gtk_widget_set_margin_start(text_view, 10); 
+    gtk_widget_set_margin_end(text_view, 10); 
+    gtk_widget_set_margin_top(text_view, 10); 
+    gtk_widget_set_margin_bottom(text_view, 10); 
     gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_view), GTK_WRAP_WORD_CHAR);
 
@@ -244,17 +253,33 @@ static void show_history_dialog(GtkWidget *parent)
     gtk_box_append(GTK_BOX(content_area), scrolled_window);
 
     GtkWidget *label = gtk_label_new("Set history to ... lines:");
+    gtk_widget_set_margin_start(label, 10); 
+    gtk_widget_set_margin_end(label, 10); 
+    gtk_widget_set_margin_top(label, 1); 
+    gtk_widget_set_margin_bottom(label, 1); 
     gtk_box_append(GTK_BOX(content_area), label);
 
     GtkWidget *count_entry = gtk_entry_new();
+    gtk_widget_set_margin_start(count_entry, 10); 
+    gtk_widget_set_margin_end(count_entry, 10); 
+    gtk_widget_set_margin_top(count_entry, 1); 
+    gtk_widget_set_margin_bottom(count_entry, 1); 
     gtk_box_append(GTK_BOX(content_area), count_entry);
 
 
     GtkButton *setButton = GTK_BUTTON(gtk_button_new_with_label("Set"));
+    gtk_widget_set_margin_start(setButton, 10); 
+    gtk_widget_set_margin_end(setButton, 10); 
+    gtk_widget_set_margin_top(setButton, 1); 
+    gtk_widget_set_margin_bottom(setButton, 1); 
     gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(setButton));
     g_signal_connect(setButton, "clicked", G_CALLBACK(setButton__clicked), count_entry);
 
     GtkButton *resetButton = GTK_BUTTON(gtk_button_new_with_label("reset history"));
+    gtk_widget_set_margin_start(resetButton, 10); 
+    gtk_widget_set_margin_end(resetButton, 10); 
+    gtk_widget_set_margin_top(resetButton, 1); 
+    gtk_widget_set_margin_bottom(resetButton, 5); 
     gtk_box_append(GTK_BOX(content_area), GTK_WIDGET(resetButton));
     g_signal_connect(resetButton, "clicked", G_CALLBACK(resetButton__clicked), 0);
 
@@ -398,9 +423,6 @@ static void kalkulaator_window__equal_clicked(GtkButton *button, gpointer user_d
       // Calculate the result
       gchar *result = CalcMain((char*)text, valX, valY);
       type__file((gchar*)text, "= ", result);
-      //gtk_editable_set_text(GTK_EDITABLE(window->display2), text);
-
-     //gtk_print_operation_set_export_filename( )
       // Store the result as the last result
       g_free(window->last_result);
       window->last_result = g_strdup(result);
@@ -667,8 +689,6 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
 
     //separators between masks
     GtkWidget *empty_row1 = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
-    //gtk_widget_set_hexpand(empty_row1, TRUE);
-    //gtk_widget_set_vexpand(empty_row1, TRUE);
     gtk_grid_attach(GTK_GRID(grid), empty_row1, 0, 2, 5, 1);
 
 
@@ -705,8 +725,6 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
 
     //empty row 7
     GtkWidget *empty_row2 = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
-    //gtk_widget_set_hexpand(empty_row2, TRUE);
-    //gtk_widget_set_vexpand(empty_row2, TRUE);
     gtk_grid_attach(GTK_GRID(grid), empty_row2, 0, 7, 5, 1);
 
     //row 8/1
@@ -742,8 +760,6 @@ static void kalkulaator_window__bitmask_clicked(GtkButton *data, gpointer user_d
 
     //separator row between
     GtkWidget *empty_row3 = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
-    //gtk_widget_set_hexpand(empty_row3, TRUE);
-    //gtk_widget_set_vexpand(empty_row3, TRUE);
     gtk_grid_attach(GTK_GRID(grid), empty_row3, 2, 2, 1, 11);
 
     //row 2/2
@@ -911,7 +927,6 @@ static void masking__clicked(GtkButton *data, gpointer user_data)
 
 static void kalkulaator_window_class_init (KalkulaatorWindowClass *klass)
 {
- // gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS(klass), "/org/example/App/kalkulaator-window.ui");
     gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS(klass), "/org/github/kalkulaator/kalkulaator-window.ui");
 
 
@@ -919,8 +934,7 @@ static void kalkulaator_window_class_init (KalkulaatorWindowClass *klass)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS(klass), KalkulaatorWindow, display);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS(klass), KalkulaatorWindow, display2);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS(klass), KalkulaatorWindow, display3);
-  //gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS(klass), KalkulaatorWindow, togglebutton);
-  // Bind other template children as needed
+ 
 
   // Bind signal handlers
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__nr_clicked);
@@ -954,10 +968,7 @@ static void kalkulaator_window_class_init (KalkulaatorWindowClass *klass)
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__xtrabutton3_clicked);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__xtrabutton4_clicked);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__bitmask_clicked);
-  //gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window__toggle_button_toggled);
-/*
-  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS(klass), kalkulaator_window_xtrabutton5_clicked);
-   */
+
 
 }
 
@@ -1017,19 +1028,5 @@ kalkulaator_window_init (KalkulaatorWindow *self)
   gtk_editable_set_text (GTK_EDITABLE(self->display2), "0");
   gtk_editable_set_text (GTK_EDITABLE(self->display3), "0");
 
-  //g_signal_connect(self->xVal, "toggled", G_CALLBACK(kalkulaator_window__toggle_button_toggled), self);
-  //g_signal_connect(self->yVal, "toggled", G_CALLBACK(kalkulaator_window__toggle_button_toggled), self);
-  // g_signal_connect(self->togglebutton, "toggled", G_CALLBACK(kalkulaator_window__toggle_button_toggled), self);
-  /*
-  g_signal_connect(self->xtrabutton5, "clicked", G_CALLBACK(kalkulaator_window_xtrabutton5_clicked), self);
-   */
-  //gtk_editable_set_position(GTK_EDITABLE(self->display), +0);
-  /*
-  gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton1), FALSE);
-  gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton2), FALSE);
-  gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton3), FALSE);
-  gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton4), FALSE);
-  gtk_widget_set_visible(GTK_WIDGET(self->xtrabutton5), FALSE);
-   */
-  // history__delete();
+ 
 }
