@@ -80,10 +80,7 @@ struct _KalkulaatorWindow
   GtkButton           *bitmask;
 
   GtkToggleButton     *togglebutton;
-/*
-  GtkButton           *xtrabutton5;
-   */
-  //
+
   gchar               *expression;
   gchar               *last_result;
   };
