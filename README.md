@@ -3,9 +3,9 @@ Dependencies:
 meson   
 GTK4   
 
-Esimest korda kasutades tuleb alla laadida Kalkulaator_GTK4 failid zip failina ja extractida need kõik.
-Seejärel tuleb liikuda käsureaga Kalkulator_GTK4 kausta.
-Nüüd sisesta järgnevad neli käsku käsureale:
+When using for the first time, download the Kalkuator_GTK4 files as a zip file and extract them all.   
+Then you need to go to the Kalkulator_GTK4 folder with the command line.   
+Now enter the following four commands at the command line:   
 
 meson setup builddir  
 cd builddir  
