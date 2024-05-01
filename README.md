@@ -13,5 +13,4 @@ meson compile
 ./src/kalkulaator  
 
 NB!   
-Pärast programmi avamist tuleb vajutada hisotry nuppu ja sisestada ajaloole kindel väärtus, et seda kasutada.   
-
+When opening the program for the first time, you must press the hisotry button and enter a specific value for the history to use it.   
