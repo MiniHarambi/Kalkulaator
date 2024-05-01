@@ -6,9 +6,9 @@
 #include "kalkulaator-calc.h"
 #include "kalkulaator-window.h"
 
-int error = 0;
+int error;
 
-static unsigned count = 0;
+static unsigned cnt = 0;
 int len;
 history *tehted;
 
@@ -25,7 +25,7 @@ void type__file(const gchar *content, char *text, char *result)
     fscanf(fInLen, "%d", &len);
     fclose(fInLen);
 
-    history *new_tehted = realloc(tehted, (count + 1) * sizeof(history));
+    history *new_tehted = realloc(tehted, (cnt + 1) * sizeof(history));
     if (new_tehted == NULL) {
         printf("Memory allocation failed.\n");
         return;
@@ -34,8 +34,8 @@ void type__file(const gchar *content, char *text, char *result)
 
     char values[200];
     sprintf(values, "%s %s %s", content, text, result);
-    strcpy(tehted[count].text, values);
-    count++;
+    strcpy(tehted[cnt].text, values);
+    cnt++;
 }
 
 void PrintFile() 
@@ -47,9 +47,9 @@ void PrintFile()
         return;
     }
     
-    int print_count = (count < len) ? count : len;
+    int print_count = (cnt < len) ? cnt : len;
     for (int j = print_count - 1; j >= 0; j--) {
-        fprintf(fOut, "%s\n", tehted[count - j - 1].text);
+        fprintf(fOut, "%s\n", tehted[cnt - j - 1].text);
     }
     fclose(fOut);
 }
@@ -64,14 +64,14 @@ int isEmpty(Stack *s) {
 
 void push(Stack *s, double value) {
     if (s->top == MAX_SIZE - 1) {
-        error = 14;
+        error = 13;
     }
     s->items[++(s->top)] = value;
 }
 
 double pop(Stack *s) {
     if (isEmpty(s)) {
-        error = 13;
+        error = 12;
     }
     return s->items[(s->top)--];
 }
@@ -169,7 +169,7 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
         }
         else if (expr[i] == '(') {
             int j = i + 1;
-            int count = 1; // Parentheses count
+            int count = 1; 
             while (count != 0) {
                 if (expr[j] == '('){
                   count++;
@@ -177,11 +177,12 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
                 else if (expr[j] == ')'){
                   count--;
                 }
-                else if (j == (end))
+                else if (j == (end-1))
                 {
                   expr[j] = ')';
                   error = 11;
                   count--;
+                  return 0;
                 }
                 j++;
             }
@@ -201,9 +202,19 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
               result = result * op;
             }
             push(&operand_stack, result);
-            i = j - 1; // Adjust i for next loop increment
+            i = j - 1; 
         }
         else if (expr[i] == ')' || expr[i] == '+' || expr[i] == '-' || expr[i] == '*' || expr[i] == '/' || expr[i] == '^') {
+            if(i==0 || i == end-1)
+            {
+            	error=13;
+            	return 0;
+            }
+            if(!isdigit(expr[i+1]))
+            {
+            	error=12;
+            	return 0;
+            }
             while (!isEmpty(&operator_stack) && precedence(operator_stack.items[operator_stack.top]) >= precedence(expr[i])) {
                 double op2 = pop(&operand_stack);
                 double op1 = pop(&operand_stack);
@@ -213,7 +224,7 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
             push(&operator_stack, expr[i]);
         }
         else if (expr[i] == 'l' && expr[i+1] == 'o' && expr[i+2] == 'g' && expr[i+3] == '_' && isdigit(expr[i+4])) {
-            int j = i + 4; // Move past the 'L'
+            int j = i + 4; 
             int base = 0;
             while (isdigit(expr[j])) {
                 base = base * 10 + (expr[j] - '0');
@@ -221,7 +232,7 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
             }
             int k = j + 1;
           printf("%d", k);
-            int count = 1; // Parentheses count
+            int count = 1; 
             while (count != 0) {
                 if (expr[k] == '('){
                   count++;
@@ -230,11 +241,12 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
                 {
                   count--;
                 }
-                else if (k == (end))
+                else if (k == (end-1))
                 {
                   expr[k] = ')';
                   error = 11;
                   count--;
+                  return 0;
                 }
                 k++;
             }
@@ -266,18 +278,22 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
         }
         else if ((expr[i] == 'l' && expr[i+1] == 'o' && expr[i+2] == 'g') ||
                  (expr[i] == 's' && expr[i+1] == 'q' && expr[i+2] == 'r' && expr[i+3] == 't')) {
-            int j = i;
+            int j = 0;
             if (expr[i] == 'l' && expr[i+1] == 'o' && expr[i+2] == 'g')
             {
                 j = i + 3;
-                if (expr[i+3] != '(')
+                if (expr[i+3] != '('){
                   error = 2;
+                  return 0;
+                  }
             }
             else if (expr[i] == 's' && expr[i+1] == 'q' && expr[i+2] == 'r' && expr[i+3] == 't')
             {
                 j = i + 4;
-                if (expr[i+4] != '(')
+                if (expr[i+4] != '('){
                   error = 5;
+                  return 0;
+                  }
             }
             int k = j + 1;
             int count = 1;
@@ -290,11 +306,12 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
                 {
                   count--;
                 }
-                else if (k == (end))
+                else if (k == (end-1))
                 {
                   expr[k] = ')';
                   error = 11;
                   count--;
+                  return 0;
                 }
                 k++;
             }
@@ -303,6 +320,7 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
             if (arg < 0)
             {
               error = 10;
+              return 0;
             }
             if (expr[i] == 'l' && expr[i+1] == 'o' && expr[i+2] == 'g') {
                 result = log10(arg);
@@ -348,18 +366,23 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
             {
               j = i+3;
               if (expr[j] != '(')
+              {
                 error = 8;
+                return 0;
+               }
             }
           else if ((expr[i] == 'a' && expr[i+1] == 't' && expr[i+2] == 'a' && expr[i+3] == 'n') ||
                  (expr[i] == 'a' && expr[i+1] == 's' && expr[i+2] == 'i' && expr[i+3] == 'n') ||
                  (expr[i] == 'a' && expr[i+1] == 'c' && expr[i+2] == 'o' && expr[i+3] == 's'))
             {
               j = i + 4;
-              if (expr[j] != '(')
+              if (expr[j] != '('){
                 error = 9;
+                return 0;
+               }
             }
             int k = j + 1;
-            int count = 1; // Parentheses count
+            int count = 1; 
             while (count != 0) {
                 if (expr[k] == '(')
                 {
@@ -369,11 +392,12 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
                 {
                   count--;
                 }
-                else if (k == (end))
+                else if (k == (end-1))
                 {
-                  expr[k] = ')';
+                  expr[k] = ')'; 
                   error = 11;
                   count--;
+                  return 0;
                 }
                 k++;
             }
@@ -382,15 +406,19 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
 
             if (expr[i] == 'a' && expr[i+1] == 's' && expr[i+2] == 'i' && expr[i+3] == 'n')
             {
-              if ((arg > 1)||(arg < -1))
+              if ((arg > 1)||(arg < -1)){
                 error = 6;
+                return 0;
+                }
+                
               result = asin(arg);
               result = (result*180)/M_PI;
             }
             else if (expr[i] == 'a' && expr[i+1] == 'c' && expr[i+2] == 'o' && expr[i+3] == 's')
             {
-              if ((arg > 1)||(arg < -1))
+              if ((arg > 1)||(arg < -1)){
                 error = 7;
+                }
               result = acos(arg);
               result = (result*180)/M_PI;
             }
@@ -458,14 +486,12 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
         {
           double result = 0;
           double op = pop(&operand_stack);
-
-          if (op == 0)error = 12;
           if (op < 0)
           {
              op *= -1;
             result = factorialOfNum((int)op);
             result *= -1;
-            }
+          }
           else
           {
             result = factorialOfNum((int)op);
@@ -487,8 +513,11 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
                 (expr[i] != 'a' && expr[i+1] != 'c' && expr[i+2] != 'o' && expr[i+3] != 's'))
         {
           error = 1;
+          return 0;
         }
-
+        else if(error != 0)
+        return 0;
+	
         i++;
     }
     while (!isEmpty(&operator_stack)) {
@@ -549,11 +578,9 @@ gchar *ErrorMessage(int error)
   else if (error == 11)
     return g_strdup_printf ("%s", "Invalid expression: unable to find closing paranthesis");
   else if (error == 12)
-    return g_strdup_printf ("%s", "Can't take factorial from a negative numbers");
+    return g_strdup_printf ("%s", "Operator next to another operator");
   else if (error == 13)
-    return g_strdup_printf ("%s", "Too many operators");
-  else if (error == 14)
-    return g_strdup_printf ("%s", "Too few operators");
+    return g_strdup_printf ("%s", "Too few operands");
   else
     return g_strdup_printf ("%s", "Unknown error");
 }
