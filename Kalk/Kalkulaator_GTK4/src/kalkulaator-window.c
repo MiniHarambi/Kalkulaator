@@ -301,6 +301,7 @@ static void kalkulaator_window__history_clicked(GtkButton *button, gpointer user
   g_print("History button clicked.\n");
 
   KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+  PrintFile();
   show_history_dialog(GTK_WIDGET(window));
 
 }
