@@ -210,7 +210,7 @@ double evaluateExpression(char *expr, int start, int end, double x, double y) {
             	error=13;
             	return 0;
             }
-            if(!isdigit(expr[i+1]))
+            if(!isdigit(expr[i+1])&&(expr[i-1]!='x')&&(expr[i]!='y'))
             {
             	error=12;
             	return 0;
