@@ -12,3 +12,5 @@ cd builddir
 meson compile  
 ./src/kalkulaator  
 
+Pärast programmi avamist tuleb vajutada hisotry nuppu ja sisestada ajaloole kindel väärtus, et seda kasutada.   
+
