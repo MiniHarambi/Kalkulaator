@@ -1,0 +1,59 @@
+typedef struct
+{
+	char text[200];
+	
+}data;
+
+static unsigned count = 0;
+int len;
+void type__file(const gchar *content, char *text, char *result)
+{
+    const char *filepath2 = "len.txt";
+    FILE *fInLen = fopen(filepath2, "r");
+    if (fInLen == NULL)
+    {
+      g_print("Error opening file for writing\n");
+      return;
+    }
+    fscanf(fInLen, "%d", &len);
+    
+    data *tehted = malloc((len+1)*sizeof(data));
+    if (tehted == NULL) 
+	  {
+      printf("Memory allocation failed.\n");
+      fclose(fInLen);
+      return EXIT_FAILURE;
+    }
+    char values[200];
+    sprintf(values, "%s %s %s", content, text, result);
+    strcpy(tehted[count].text, values);
+    count++;
+}
+
+void PrintFile()
+{
+    const char *filepath = "History.txt";
+    FILE *fOut = fopen(filepath, "at+");
+    if (fOut == NULL)
+    {
+      g_print("Error opening file for writing\n");
+      return;
+    }
+    data *tehted;
+    for (int j = len; j >= 0; j--)
+    {
+      fprintf(fOut, "%d %s\n", j, tehted[count-j].text);
+    }
+    fclose(fOut);
+}
+
+static void kalkulaator_window__history_clicked(GtkButton *button, gpointer user_data)
+{
+  // Functionality for the history button
+  g_print("History button clicked.\n");
+
+  KalkulaatorWindow *window = KALKULAATOR_WINDOW(user_data);
+  PrintFile();
+  show_history_dialog(GTK_WIDGET(window));
+
+}
