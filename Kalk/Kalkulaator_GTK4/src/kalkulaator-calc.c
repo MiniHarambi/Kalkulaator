@@ -8,47 +8,50 @@
 
 int error = 0;
 
-void type__file(const gchar *content, char *text, char *result)
+static unsigned count = 0;
+int len;
+history *tehted;
+
+
+
+void type__file(const gchar *content, char *text, char *result) 
 {
-    int count = 0;
-    char chz;
-    const char *filepath = "History.txt";
-    FILE *fOut = fopen(filepath, "at+");
-    if (fOut == NULL)
-    {
-      g_print("Error opening file for writing\n");
-      return;
-    }
     const char *filepath2 = "len.txt";
     FILE *fInLen = fopen(filepath2, "r");
-    if (fInLen == NULL)
-    {
-      g_print("Error opening file for writing\n");
-      fclose(fOut);
-      return;
+    if (fInLen == NULL) {
+        g_print("Error opening file for reading\n");
+        return;
     }
-    char num[5];
-    fscanf(fInLen, "%s", num);
-    int n = atoi(num);
-    while ((chz = fgetc(fOut)) != EOF)
-    {
-      if (chz == '\n')
-        {
-         count++;
-        }
-    }
-
-    g_print("%d", count+1);
-
-    if(count < n)
-    {
-      fprintf(fOut, "%d. %s %s %s\n",count+1, content, text, result);
-    }
-
+    fscanf(fInLen, "%d", &len);
     fclose(fInLen);
-    fclose(fOut);
 
-    g_print("Content written to file.\n");
+    history *new_tehted = realloc(tehted, (count + 1) * sizeof(history));
+    if (new_tehted == NULL) {
+        printf("Memory allocation failed.\n");
+        return;
+    }
+    tehted = new_tehted;
+
+    char values[200];
+    sprintf(values, "%s %s %s", content, text, result);
+    strcpy(tehted[count].text, values);
+    count++;
+}
+
+void PrintFile() 
+{
+    const char *filepath = "History.txt";
+    FILE *fOut = fopen(filepath, "w");
+    if (fOut == NULL) {
+        g_print("Error opening file for writing\n");
+        return;
+    }
+    
+    int print_count = (count < len) ? count : len;
+    for (int j = print_count - 1; j >= 0; j--) {
+        fprintf(fOut, "%s\n", tehted[count - j - 1].text);
+    }
+    fclose(fOut);
 }
 
 void initialize(Stack *s) {
