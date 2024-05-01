@@ -549,7 +549,7 @@ gchar *ErrorMessage(int error)
   else if (error == 11)
     return g_strdup_printf ("%s", "Invalid expression: unable to find closing paranthesis");
   else if (error == 12)
-    return g_strdup_printf ("%s", "Can't take fractions from 0 or negative numbers");
+    return g_strdup_printf ("%s", "Can't take factorial from a negative numbers");
   else if (error == 13)
     return g_strdup_printf ("%s", "Too many operators");
   else if (error == 14)
