@@ -34,6 +34,10 @@ typedef struct {
     char errorMessage[MAX_SIZE];
 } Stack;
 
+typedef struct {
+    char text[200];
+} history;
+
 // Function prototypes
 void initialize(Stack *s);
 int isEmpty(Stack *s);
