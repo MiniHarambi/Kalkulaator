@@ -346,8 +346,8 @@
           <object class="GtkBox" id="row6">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
             <child>
-              <object class="GtkButton" id="button9">
-                <property name="label">9</property>
+              <object class="GtkButton" id="button7">
+                <property name="label">7</property>
                 <property name="width-request">120</property>
                 <property name="height-request">50</property>
                     <property name="margin-start">1</property>
@@ -376,8 +376,8 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button7">
-                    <property name="label">7</property>
+                  <object class="GtkButton" id="button9">
+                    <property name="label">9</property>
                      <property name="width-request">120</property>
                     <property name="height-request">50</property>
                     <property name="margin-start">1</property>
